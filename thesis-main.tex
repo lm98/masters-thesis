@@ -5,6 +5,13 @@
 \usepackage{notes}
 \usepackage{shortcuts}
 \usepackage{acronym}
+\usepackage{listings-rust}
+\usepackage{svg}
+\usepackage{epstopdf}
+\epstopdfDeclareGraphicsRule{.svg}{pdf}{.pdf}{%
+    inkscape -z -D --file=#1 --export-pdf=\OutputFile
+}
+\AppendGraphicsExtensions{.svg}
 
 \school{\unibo}
 \programme{Corso di Laurea Magistrale in Ingegneria e Scienze Informatiche}
@@ -18,7 +25,7 @@
 \academicyear{2022-2023}
 
 % Definition of acronyms
-\acrodef{iot}[IoT]{Internet of Thing}
+\acrodef{iot}[IoT]{Internet of Things}
 \acrodef{vm}[VM]{Virtual Machine}
 \acrodef{ac}[AC]{Aggregate Computing}
 \acrodef{fc}[FC]{Field Calculus}
@@ -27,6 +34,8 @@
 \acrodef{jvm}[JVM]{Java Virtual Machine}
 \acrodef{dsl}[DSL]{Domain Specific Language}
 \acrodef{ast}[AST]{Abstract Syntax Tree}
+\acrodef{pc}[PC]{Pervasive Computing}
+\acrodef{rfid}[RFID]{Radio-Frequency Identification Technology}
 
 
 \mainlinespacing{1.241} % line spacing in main matter, comment to default (1)
