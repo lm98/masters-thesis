@@ -149,11 +149,16 @@ a variable would cause the allocation of a new memory block on the heap, an expe
 needs to create deep copies of variables stored in the heap, they can explicitly use the \textit{clone} method, which will create a new memory block on the heap and copy the data into it.
 
 \subsubsection{Ownership and Functions}
-Similarly to what happens during the variable assignment, passing a variable to a function will cause it, depending on its type, to be moved or copied, as shown in the following code:
+Similarly to what happens during the variable assignment, passing a variable to a function will cause it, depending on its type, to be moved or copied, as shown in the listing \ref{lst:func_own_1}.
 
 \lstinputlisting[language=Rust, label={lst:func_own_1}]{listings/function_ownership_ex1.rs}
 
+Returning values from functions will also cause ownership to be transferred, as shown in the listing \ref{lst:func_own_2}.
+
+\lstinputlisting[language=Rust, label={lst:func_own_2}]{listings/function_ownership_ex2.rs}
+
 \subsubsection{References and Borrowing}
+Instead of taking ownership of a variable and then returning it to the caller, it is possible to pass a reference to the variable to the function, so that the function can use the variable without taking ownership of it.
 
 \subsection{Functional Features of Rust}
 
