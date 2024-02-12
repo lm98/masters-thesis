@@ -159,8 +159,38 @@ Returning values from functions will also cause ownership to be transferred, as 
 
 \subsubsection{References and Borrowing}
 Instead of taking ownership of a variable and then returning it to the caller, it is possible to pass a reference to the variable to the function, so that the function can use the variable without taking ownership of it.
+For a function to take a reference to a variable, it is sufficient to prefix the type definition of the variable with an ampersand (\&).
+By default, references are immutable, meaning that the function cannot modify the value of the variable. If the function needs to modify the value of the variable, it is possible to take a mutable reference to it by using the \&mut keyword.
 
 \subsection{Functional Features of Rust}
+In this subsection, we will discuss some of the \ac{fp}-adjacent features of Rust.
+
+\subsubsection{Product Types}
+In FP, product types are types that combine n values of possibly different types. In Rust, it is possible to define Product types by using the \textit{struct} keyword. In particular, one can define a product type in two ways as shown in the listing \ref{lst:product_types}.
+
+\lstinputlisting[language=Rust, label={lst:product_types}]{listings/product_types.rs}
+
+It is also possible to add functionality to the ADTs created by using the \textit{impl} keyword, as shown in the listing \ref{lst:product_types_impl}.
+
+\lstinputlisting[language=Rust, label={lst:product_types_impl}]{listings/product_types_impl.rs}
+
+\subsubsection{Sum Types and Pattern Matching}
+In FP, a sum type represent a choice between some types. In Rust we can define Sum types by using the \textit{enum} keyword. It is also possible to perform pattern matching over a sum type, as it is shown in the listing \ref{lst:sum_types}.
+
+\lstinputlisting[language=Rust, label={lst:sum_types}]{listings/sum_types.rs}
+
+\subsubsection{Polymorphism}
+Rust supports polymorphism through traits. Rust's traits are similar to Haskell's typeclasses and they allow us to define a particular functionality that a particular type has.
+For example, we can implement Haskell's Show typeclass in Rust as shown in the listing \ref{lst:polymorphism}.
+
+\lstinputlisting[language=Rust, label={lst:polymorphism}]{listings/polymorphism.rs}
+
+\subsubsection{Lambdas and Closures}
+In FP, lambda functions or anonymous functions, are functions that can be stored inside variables and passed as arguments to other functions.
+% TODOOOOOOOOOOOOOOOOOOOOOOO
+
+\subsubsection{Iterators}
+% TODOOOOOOOOOOOOOOOOOOOOOOO
 
 \subsection{Why Rust}
 
