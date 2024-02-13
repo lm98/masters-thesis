@@ -25,9 +25,9 @@ Within the IoT, ``physical and virtual ‘things’ have identities and attribut
 \section{The ScaFi Framework}
 
 \section{The Rust Programming Language}
-The Rust Programming Language is a multi-paradigm, general-purpose programming language designed originally for systems-level development. It strives to achieve both execution
+The Rust Programming Language\cite{002} is a multi-paradigm, general-purpose programming language designed originally for systems-level development. It strives to achieve both execution
 speed and memory safety and efficiency while providing zero-cost abstractions and high-level features that are unusual for low-level programming languages such as C or C++.
-In this section, we will go through Rust's main features and discuss how this language can be used to develop an \acs{ac} implementation that can run on thin devices.
+In this section, we will go through Rust's main features and asses whether this language is suitable to develop an \acs{ac} implementation that can run on thin devices or not.
 
 \subsection{Rust's Basic Features}
 \subsubsection{Variables and mutability}
@@ -175,7 +175,7 @@ It is also possible to add functionality to the ADTs created by using the \texti
 \lstinputlisting[language=Rust, label={lst:product_types_impl}]{listings/product_types_impl.rs}
 
 \subsubsection{Sum Types and Pattern Matching}
-In FP, a sum type represent a choice between some types. In Rust we can define Sum types by using the \textit{enum} keyword. It is also possible to perform pattern matching over a sum type, as it is shown in the listing \ref{lst:sum_types}.
+In FP, a sum type represents a choice between some types. In Rust, we can define Sum types by using the \textit{enum} keyword. It is also possible to perform pattern matching over a sum type, as it is shown in the listing \ref{lst:sum_types}.
 
 \lstinputlisting[language=Rust, label={lst:sum_types}]{listings/sum_types.rs}
 
@@ -186,12 +186,34 @@ For example, we can implement Haskell's Show typeclass in Rust as shown in the l
 \lstinputlisting[language=Rust, label={lst:polymorphism}]{listings/polymorphism.rs}
 
 \subsubsection{Lambdas and Closures}
-In FP, lambda functions or anonymous functions, are functions that can be stored inside variables and passed as arguments to other functions.
-% TODOOOOOOOOOOOOOOOOOOOOOOO
+In FP, lambda functions or anonymous functions, are functions that are not bound to a name. Moreover, closures are lambda functions that can "capture" the environment in which they are defined.
+In Rust, both lambdas and closures are supported, though they are both called closures. Like in other languages, Rust closures can be assigned to variables and passed to functions.
+When defining a closure in Rust, it is important to reason about the ownership of the variables that are captured by it. The listing \ref{lst:closures} shows some examples of closures in Rust.
+
+\lstinputlisting[language=Rust, label={lst:closures}]{listings/closures.rs}
 
 \subsubsection{Iterators}
-% TODOOOOOOOOOOOOOOOOOOOOOOO
+The Iterator pattern allows to traverse collection of elements in a particular manner, performing some task on each element in turn. The iterator is responsible for the trasversal logic
+so that the developer doesn't need to reimplement it each time. In Rust, the Iterator pattern is implemented through the \textit{Iterator} trait, which is implemented by the standard library's collections:
+
+\begin{lstlisting}[language=Rust]
+    trait Iterator {
+        type Item;
+        fn next(&mut self) -> Option<Self::Item>;
+        //Other default methods omitted
+    }
+\end{lstlisting}
+
+The developer can also implement the Iterator trait for his custom types, enabling many functionalities that are divided into the following categories:
+
+\begin{itemize}
+    \item \textbf{Consumer Adaptors}: these are methods that take ownership of the iterator because they traverse it using its next method, thus consuming it. Examples of consumer adaptors are reducing methods like \textit{sum};
+    \item \textbf{Iterator Adaptors}: these are methods that don't take ownership of the iterator, since they take an iterator and return another, modified one. An example of an iterator adaptor is the \textit{map} method, which applies a function to each element of the iterator;
+\end{itemize}
 
 \subsection{Why Rust}
+As shown in the previous sections, Rust is a general-purpose programming language designed with a focus on safety, speed and efficiency. These design principles, coupled with high-level features
+more adjacent to functional programming than to low-level programming, make Rust a good candidate for developing \ac{ac} implementations that can run on thin devices.
 
-\section{Towards a Rust-based AC Implementation: RuFi}
+
+\section{Towards a Rust-based AC Implementation: the RustFields Project}
