@@ -193,7 +193,7 @@ When defining a closure in Rust, it is important to reason about the ownership o
 \lstinputlisting[language=Rust, label={lst:closures}]{listings/closures.rs}
 
 \subsubsection{Iterators}
-The Iterator pattern allows to traverse collection of elements in a particular manner, performing some task on each element in turn. The iterator is responsible for the trasversal logic
+The Iterator pattern allows to traverse collection of elements in a particular manner, performing some task on each element in turn. The iterator is responsible for the traversal logic
 so that the developer doesn't need to reimplement it each time. In Rust, the Iterator pattern is implemented through the \textit{Iterator} trait, which is implemented by the standard library's collections:
 
 \begin{lstlisting}[language=Rust]
@@ -213,7 +213,49 @@ The developer can also implement the Iterator trait for his custom types, enabli
 
 \subsection{Why Rust}
 As shown in the previous sections, Rust is a general-purpose programming language designed with a focus on safety, speed and efficiency. These design principles, coupled with high-level features
-more adjacent to functional programming than to low-level programming, make Rust a good candidate for developing \ac{ac} implementations that can run on thin devices.
+more adjacent to functional programming than to low-level programming, making Rust a good candidate for developing \ac{ac} implementations that can run on thin devices.
 
 
 \section{Towards a Rust-based AC Implementation: the RustFields Project}
+The RustFields Project\cite{001} was the first attempt to bring \ac{ac} to thin devices in the Rust programming language. The project aimed to reach its goals by developing two lines of research:
+\begin{itemize}
+    \item A pure, Rust-based implementation of AC in the same vein as the ScaFi framework;
+    \item A mixed approach that aims to mix ScaFi's highly expressive API with Rust's performance and efficiency;
+\end{itemize}
+
+\subsection{RustFields Architecture}
+As stated in the official documentation of the project: \\
+``    Since the project was meant as an exploration of different options for bringing aggregate programming into native contexts, we decided to explore both solutions. The resulting architecture reflects this choice: in fact, we decided to develop a standalone aggregate programming framework in the Rust language, while also experimenting different ways to integrate it with the Scala ScaFi’s ecosystem.
+''
+
+The resulting architecture reflects this choice and this is made evident in the diagram in figure \ref{fig:rustfields-architecture}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/diagrams/img/rustfields-full-architecture.png}
+    \caption{The RustFields Architecture}
+    \label{fig:rustfields-architecture}
+\end{figure}
+
+In the architecture diagram shown in figure \ref{fig:rustfields-architecture}, the RuFi-core is responsible for implementing in Rust the core concepts of the new \ac{ac} implementation,
+structured in a way that is somewhat similar to the ScaFi's core. Then, an \textit{integration layer} was built on top of the Rust core to allow communication
+between Scala and Rust code. From then, the project development was divided into two main branches:
+\begin{itemize}
+    \item The expansion of the RuFi core, which aimed to serve as a base for a fully-fledged \ac{ac} implementation in Rust;
+    \item The development of the integration layer, aimed to bring the best of both worlds by allowing the developer to use the expressive API of ScaFi with the performance and efficiency of Rust.
+\end{itemize}
+
+The design of the RuFi-core component is of particular interest since this thesis aims to expand it and further develop an \ac{ac} implementation in Rust.
+
+\subsection{RuFi-core Design}
+As stated in the previous sections regarding the architecture of RuFi-core, it was decided to stick as much as possible to the original architecture of ScaFi-core.
+The RuFi-core architecture is shown in figure \ref{fig:rufi-core-architecture}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/diagrams/img/rufi-core-architecture.png}
+    \caption{The RuFi-core Architecture}
+    \label{fig:rufi-core-architecture}
+\end{figure}
+
+In particular, the \textit{lang} package contains the implementation of the core language constructs, that directly utilizes the RoundVM defined in the \textit{round_vm} package alongside other related concepts (such as context, export ecc.). The \textit{execution} package contains functions to evaluate aggregate programs.
