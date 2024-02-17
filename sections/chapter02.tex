@@ -14,13 +14,36 @@ chip size and now it denotes an intricate, wide system of interconnected devices
 Within the IoT, ``physical and virtual ‘things’ have identities and attributes and are capable of using intelligent interfaces and being integrated as an information network” (IERC 2013; Kirtsis 2011; Li et al.
 2012a, b)''.
 
-\subsection{From mobile computing to Pervasive Computing}
+\subsection{From distributed systems to Pervasive Computing}
 
-\section{Collective Adaptive Systems}
+\subsection{Collective Adaptive Systems}
 
-\section{Field Calculus}
+\section{Aggregate Programming and Field Calculus}
+Aggregate programming \cite{Beal2016} is a programming approach that aims to shift the focus on the individual device perspective that is typical of traditional programming approaches, which 
+inevitably entangles the system's behavior design with aspects of distributed systems design (such as efficient and reliable communication, coordination and fault tolerance) to an approach that raises
+the abstraction level from individual devices to large aggregations of devices. It does so by exploiting the concepts of computational fields and \ac{fc} \cite{10.1145/3285956, 10.1007/978-3-642-45364-9_11}.
 
-\section{Aggregate Programming}
+Within the \ac{fc}, a \textit{computational field} is a function mapping every computational device in a network, represented by dynamic and reflexive neighboring relationship between devices, to a computational object. 
+Depending on the computational object in question, there can be many examples of computational fields:
+\begin{itemize}
+    \item \textbf{Scalar Fields}: a field that maps every device to the value of some sensor reading;
+    \item \textbf{Vector Fields}: a field that maps every location in the network to a set of the best routes to reach it;
+    \item \textbf{Boolean Indicator Field}: a field that represents the area around an object of interest;
+\end{itemize}
+
+The \ac{fc} main goal is to ``capture a set of key ingredients of programming languages supporting the creation of computational fields: composition of fields, functions
+over fields, the evolution of fields over time, construction of fields of values from neighbors, and restriction of a field computation to a sub-region of the network''.
+
+This calculus is based on the idea of ``expressing aggregate system behavior by a functional composition of operators that manipulate (evolve, combine, restrict) continuous fields''
+
+A key concept of Field Calculus is that these aggregate-level specifications can also be interpreted as a local set of rules that define the iterative asynchronous execution of \textit{computation rounds} consisting of receiving messages from the neighborhood, computing a local value and finally
+spreading messages to all the neighbors.
+
+\subsection*{Operational Semantics}
+%TODO: parla degli operatori principali
+
+\subsection*{From Global to Local}
+%TODO: parla del rapporto tra visione globale e locale di un programma aggregato
 
 \section{The ScaFi Framework}
 
@@ -258,4 +281,5 @@ The RuFi-core architecture is shown in figure \ref{fig:rufi-core-architecture}.
     \label{fig:rufi-core-architecture}
 \end{figure}
 
-%The package \textit{lang} contains the implementation of the core language constructs, that directly utilizes the \textit{RoundVM} defined in the \textit{round_vm} package alongside other related concepts such as context, export, path and slot. Finally, the \textit{execution} package contains functions to evaluate aggregate programs.
+\subsection{The Language}
+RuFi-core's language implementation
