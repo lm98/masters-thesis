@@ -19,11 +19,11 @@ Within the IoT, ``physical and virtual ‘things’ have identities and attribut
 \subsection{Collective Adaptive Systems}
 
 \section{Aggregate Programming and Field Calculus}
-Aggregate programming \cite{Beal2016} is a programming approach that aims to shift the focus on the individual device perspective that is typical of traditional programming approaches, which 
+Aggregate programming \cite{Beal2016} is a programming approach that aims to shift the focus on the individual device perspective that is typical of traditional programming approaches, which
 inevitably entangles the system's behavior design with aspects of distributed systems design (such as efficient and reliable communication, coordination and fault tolerance) to an approach that raises
-the abstraction level from individual devices to large aggregations of devices. It does so by exploiting the concepts of computational fields and \ac{fc} \cite{10.1145/3285956, 10.1007/978-3-642-45364-9_11}.
+the abstraction level from individual devices to large aggregations of devices. It does so by exploiting the concepts of computational fields and \ac{fc} \cite{10.1145/3285956, 10.1007/978-3-642-45364-9_11}.\\
 
-Within the \ac{fc}, a \textit{computational field} is a function mapping every computational device in a network, represented by dynamic and reflexive neighboring relationship between devices, to a computational object. 
+Within the \ac{fc}, a \textit{computational field} is a function mapping every computational device in a network, represented by a dynamic and reflexive neighboring relationship between devices, to a computational object.
 Depending on the computational object in question, there can be many examples of computational fields:
 \begin{itemize}
     \item \textbf{Scalar Fields}: a field that maps every device to the value of some sensor reading;
@@ -36,14 +36,71 @@ over fields, the evolution of fields over time, construction of fields of values
 
 This calculus is based on the idea of ``expressing aggregate system behavior by a functional composition of operators that manipulate (evolve, combine, restrict) continuous fields''
 
-A key concept of Field Calculus is that these aggregate-level specifications can also be interpreted as a local set of rules that define the iterative asynchronous execution of \textit{computation rounds} consisting of receiving messages from the neighborhood, computing a local value and finally
-spreading messages to all the neighbors.
+A key concept of Field Calculus is that these aggregate-level specifications can also be interpreted as a local set of rules that define the iterative asynchronous execution of \textit{computation rounds}.
+The local, round-based computational model for device $\delta$ consists of the following steps:
 
-\subsection*{Operational Semantics}
-%TODO: parla degli operatori principali
+\begin{enumerate}
+    \item sleep for some time;
+    \item gather incoming messages from neighbors in the form of \textit{neighboring fields} mapping neighbors identifiers to their shared computation values;
+    \item perceive contextual information through sensors;
+    \item retrieve stored information about the previous round execution;
+    \item evaluate the program P, manipulating the data values received by neighbors, perceived from the context or retrieved from local memory;
+    \item stores some data to be used in the following round and emits a message to all neighbors with information about the computation outcome;
+    \item go back to sleep.
+\end{enumerate}
 
-\subsection*{From Global to Local}
-%TODO: parla del rapporto tra visione globale e locale di un programma aggregato
+It is said that the device $\delta$ \textit{fires} when performing the steps 2-6.
+
+\subsection{Field Calculus' Syntax}
+\label{subsec:fc-syntax}
+The core syntax of the \ac{fc} is shown in figure \ref{fig:fc-syntax}, where we can see the following elements:
+
+\begin{figure}
+    \begin{align*}
+        \boxed{
+            \begin{aligned}
+                P    & ::= F\ e                                                                                                                   &  & \text{program}                  \\
+                F    & ::= def \, d(\bar{x}) \{e\}                                                                                                &  & \text{function declaration}     \\
+                e    & ::= x \ | \ v \ | \ (\bar{x}) \rightarrow e \ | \ if(e_0)\{e_1\}\{e_2\} \ | \ nbr\{e\} \ | \ rep(e_0)\{(x) \rightarrow e\} &  & \text{expression}               \\
+                f    & ::= d \ | \ b    | \     (\bar{x}) \rightarrow e                                                                           &  & \text{function name}            \\
+                v    & ::= l \ | \ \phi                                                                                                           &  & \text{value}                    \\
+                l    & ::= c(\bar{l})     | \ f                                                                                                   &  & \text{local value}              \\
+                \phi & ::= \bar{\delta} \mapsto \bar{l}                                                                                           &  & \text{neighbouring field value}
+            \end{aligned}
+        }
+    \end{align*}
+    \caption{Field Calculus syntax\cite{10.1145/3285956}.}
+    \label{fig:fc-syntax}
+\end{figure}
+
+\begin{itemize}
+    \item a program \textit{P}, consisting of a sequence of function declarations and a main expression;
+    \item function declarations \textit{F}, which consists of the name of the function d, a list of variables $\bar{x}$ representing parameters, and a function body e;
+    \item expressions \textit{e} model an entire field evolution. A more detailed explanation of expressions is given later in this section;
+    \item a value \textit{v} can be either a \textit{neighboring field} $\phi$ or a \textit{local value} l. When the device $\delta$ fires, l represents data produced by $\delta$, while $\phi$ represents a field that maps neighbors of $\delta$ to their local values;
+    \item in a higher-order extension of the model proposed in \cite{10.1145/3285956}, \textit{l} can be either a data value or a function value;
+\end{itemize}
+
+\subsection{Informal Semantics}
+Hereby are presented the four core field manipulation expressions, previously mentioned in the section \ref{subsec:fc-syntax}:
+
+\begin{itemize}
+    \item $rep(e_0)\{(x) \rightarrow e\}$ is the "repeat" construct, representing \textit{time evolution} and it is used to dynamically changing fields. At each computation round,
+          the device $\delta$ yields the result of the application of the anonymous function $(x) \rightarrow e$ to the value of the rep expression at the previous round, then the same anonymous function is
+          applied to the initialization expression $e_0$;
+    \item $nbr\{e\}$ is the \textit{neighboring field construction} expression, modeling device-to-neighbor interaction and mapping each neighbor of $\delta$ to the result of the expression e;
+    \item $if(e_0)\{e_1\}\{e_2\}$ represents \textit{domain restriction}. It is a lazy-evaluating branch construct, computing $e_1$ on devices in the restricted domain $D_t$ where $e_0$ is true and $e_2$ on devices in the restricted domain $D_f$ where $e_0$ is false.
+          Since the device $delta$ does not compute the other branch of the expression, there are two important consequences:
+          \begin{itemize}
+              \item any $nbr\{e\}$ expression in the opposite branch of the domain cannot communicate with the device $\delta$ since it never computes it;
+              \item if $\delta$ evaluated $e_1$ in its previous rounds, all rep-expressions in $e_2$ will start from scratch.
+                    Similarly, values stored for rep-expressions in $e_1$ will be lost so that also they will start from scratch in the next round.
+          \end{itemize}
+          This means that the evaluation of $e_1$ and $e_2$ proceeds in complete isolation from one domain to the other;
+    \item $e(e_1, ..., e_n)$, where $n>=0$ and e evaluates to a field of function values, is the \textit{function call} expression.
+\end{itemize}
+
+
 
 \section{The ScaFi Framework}
 
@@ -248,7 +305,7 @@ The RustFields Project\cite{001} was the first attempt to bring \ac{ac} to thin 
 
 \subsection{RustFields Architecture}
 As stated in the official documentation of the project: \\
-``    Since the project was meant as an exploration of different options for bringing aggregate programming into native contexts, we decided to explore both solutions. The resulting architecture reflects this choice: in fact, we decided to develop a standalone aggregate programming framework in the Rust language, while also experimenting different ways to integrate it with the Scala ScaFi’s ecosystem.
+``    Since the project was meant as an exploration of different options for bringing aggregate programming into native contexts, we decided to explore both solutions. The resulting architecture reflects this choice: in fact, we decided to develop a standalone aggregate programming framework in the Rust language, while also experimenting with different ways to integrate it with the Scala ScaFi’s ecosystem.
 ''
 
 The resulting architecture reflects this choice and this is made evident in the diagram in figure \ref{fig:rustfields-architecture}.
