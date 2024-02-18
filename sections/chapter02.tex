@@ -4,19 +4,9 @@
 
 \chapter{Background}
 \label{chap:background}
-
-\section{Internet of Things and Pervasive Computing}
-
-\subsection{The Definition of IoT}
-The \ac{iot} is a broad and ever-evolving field that has its roots in the concept proposed in 1999 by Kevin Ashton where he refers to it as ``uniquely identifiable
-interoperable connected objects with \ac{rfid} ''. As the years passed, the scope of IoT evolved with the rapid increase in the rate of computational power and
-chip size and now it denotes an intricate, wide system of interconnected devices that become 'smart' or 'intelligent' through added sensors and computational capabilities.
-Within the IoT, ``physical and virtual ‘things’ have identities and attributes and are capable of using intelligent interfaces and being integrated as an information network” (IERC 2013; Kirtsis 2011; Li et al.
-2012a, b)''.
-
-\subsection{From distributed systems to Pervasive Computing}
-
-\subsection{Collective Adaptive Systems}
+Presented in this chapter are some core concepts that serve as a knowledge base upon which this thesis is built.
+First, we will introduce the reader to the concept of \ac{ac}. Then we will examine ScaFi, a state-of-the-art implementation of \ac{ac}, that served as an inspiration for this thesis's project.
+Finally, we will introduce the Rust programming language, which is the language of choice for the implementation of the project.
 
 \section{Aggregate Programming and Field Calculus}
 Aggregate programming \cite{Beal2016} is a programming approach that aims to shift the focus on the individual device perspective that is typical of traditional programming approaches, which
@@ -32,9 +22,9 @@ Depending on the computational object in question, there can be many examples of
 \end{itemize}
 
 The \ac{fc} main goal is to ``capture a set of key ingredients of programming languages supporting the creation of computational fields: composition of fields, functions
-over fields, the evolution of fields over time, construction of fields of values from neighbors, and restriction of a field computation to a sub-region of the network''.
+over fields, the evolution of fields over time, construction of fields of values from neighbors, and restriction of a field computation to a sub-region of the network \cite{10.1007/978-3-642-45364-9_11}''.
 
-This calculus is based on the idea of ``expressing aggregate system behavior by a functional composition of operators that manipulate (evolve, combine, restrict) continuous fields''
+This calculus is based on the idea of ``expressing aggregate system behavior by a functional composition of operators that manipulate (evolve, combine, restrict) continuous fields \cite{10.1007/978-3-642-45364-9_11}''
 
 A key concept of Field Calculus is that these aggregate-level specifications can also be interpreted as a local set of rules that define the iterative asynchronous execution of \textit{computation rounds}.
 The local, round-based computational model for device $\delta$ consists of the following steps:
@@ -103,6 +93,33 @@ Hereby are presented the four core field manipulation expressions, previously me
 
 
 \section{The ScaFi Framework}
+\ac{scafi} is one of the most actively researched and maintained implementations of \ac{ac}. 
+It is hosted in the Scala language, a powerful and expressive \ac{jvm}-based language that brings functional programming to the JVM ecosystem with the aim of achieving expressiveness, safety and scalability.
+Although \ac{scafi} is not the only \ac{ac} implementation, compared to other aggregate programming languages it ``provides a more high-level platform that
+might support agile prototyping for research and easier integration with other tools and environments for distributed systems
+(cf. the Web and Android) \cite{10.1145/3285956}'', representing a valuable tool for scientific research.
+
+\subsection{ScaFi Architecture}
+ScaFi, as a software artifact, consists of Scala DSL and API modules for writing, testing and running aggregate programs. The architecture of the ScaFi framework shown in figure \ref{fig:scafi-architecture} consists of the following components:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/scafi-architecture.png}
+    \caption{The ScaFi Architecture}
+    \label{fig:scafi-architecture}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{scafi-commons}: provides basic abstractions and utilities such as temporal and spatial abstractions;
+    \item \textbf{scafi-core}: provides the aggregate programming DSL, consisting of syntax, semantics and a virtual machine together with a standard library of functions;
+    \item \textbf{scafi-stlib-ext}: provides extra functionalities that requires external dependencies and hence are kept separate from the core;
+    \item \textbf{scafi-simulator}: provides a basic support for simulating aggregate systems;
+    \item \textbf{scafi-simulator-gui}: provides a graphical user interface for the simulator;
+    \item \textbf{spala}: provides an actor-based aggregate computing middleware based on the Akka framework;
+    \item \textbf{scafi-distributed}: provides an integration layer between Scafi and spala;
+\end{itemize}
+
+In particular, this thesis follows up on a project that will be later introduced which took inspiration from a subset of the scafi-core module.
 
 \section{The Rust Programming Language}
 The Rust Programming Language\cite{002} is a multi-paradigm, general-purpose programming language designed originally for systems-level development. It strives to achieve both execution
@@ -327,16 +344,15 @@ between Scala and Rust code. From then, the project development was divided into
 
 The design of the RuFi-core component is of particular interest since this thesis aims to expand it and further develop an \ac{ac} implementation in Rust.
 
-\subsection{RuFi-core Design}
+\subsection{RuFi-core Architecture}
 As stated in the previous sections regarding the architecture of RuFi-core, it was decided to stick as much as possible to the original architecture of ScaFi-core.
 The RuFi-core architecture is shown in figure \ref{fig:rufi-core-architecture}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth]{figures/diagrams/img/rufi-core-architecture.png}
-    \caption{The RustFields Architecture}
+    \caption{The RuFi-core Architecture}
     \label{fig:rufi-core-architecture}
 \end{figure}
 
-\subsection{The Language}
-RuFi-core's language implementation
+In later chapters, we will discuss the detailed design of the core package and how it is integrated with the rest of the thesis project.

@@ -4,3 +4,63 @@
 
 \chapter{Design}
 \label{chap:design}
+
+\subsection*{The Colored Function Problem}
+In his article series, Bob Nystrom talks about the problem with special syntax functions in programming languages through the \textit{colored function problem} \cite{003}.
+
+Let's imagine a language that has, as most languages do, syntax for defining functions:
+
+\begin{lstlisting}
+    function evra_function() {
+        return "I love this programming language!"
+    }
+\end{lstlisting}
+
+And supports higher-order functions:
+
+\begin{lstlisting}
+    function call_twice(fn) {
+        fn();
+        fn();
+    }
+\end{lstlisting}
+
+This language has also some special rules: functions 
+\begin{lstlisting}
+    fn red();
+    fn blue();
+\end{lstlisting}
+
+Then, imagine that the two functions need to be called in different ways:
+
+\begin{lstlisting}
+    red();
+    blue[];
+\end{lstlisting}
+
+And finally, suppose that you can call red functions only within red functions, whereas for blue functions, you can call them within both red and blue functions:
+
+\begin{lstlisting}
+    // This is allowed
+    fn red_fun() {
+        blue_fun[];
+    }
+
+    // This is also allowed
+    fn red_fun() {
+        another_red_fun();
+    }
+
+    // This is allowed
+    fn blue_fun[]] {
+        another_blue_fun[]];
+    }
+
+    // This is NOT allowed
+    fn blue[] {
+        red();
+    }
+\end{lstlisting}
+
+The end result of this is that if you choose a function to be red, any other function that interacts with it needs to be red. The same applies to languages that have special syntax functions
+like Rust's async/await: having an async function means it can be called only from other async functions.
