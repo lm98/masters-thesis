@@ -5,7 +5,7 @@
 \chapter{Background}
 \label{chap:background}
 Presented in this chapter are some core concepts that serve as a knowledge base upon which this thesis is built.
-First, we will introduce the reader to the concept of \ac{ac}. Then we will examine ScaFi, a state-of-the-art implementation of \ac{ac}, that served as an inspiration for this thesis's project.
+First, we will introduce the reader to the concept of \ac{ac}. Then we will examine ScaFi, a state-of-the-art implementation of \ac{ac}, that inspired this thesis's project.
 Finally, we will introduce the Rust programming language, which is the language of choice for the implementation of the project.
 
 \section{Aggregate Programming and Field Calculus}
@@ -18,7 +18,7 @@ Depending on the computational object in question, there can be many examples of
 \begin{itemize}
     \item \textbf{Scalar Fields}: a field that maps every device to the value of some sensor reading;
     \item \textbf{Vector Fields}: a field that maps every location in the network to a set of the best routes to reach it;
-    \item \textbf{Boolean Indicator Field}: a field that represents the area around an object of interest;
+    \item \textbf{Boolean Indicator Fields}: a field that represents the area around an object of interest;
 \end{itemize}
 
 The \ac{fc} main goal is to ``capture a set of key ingredients of programming languages supporting the creation of computational fields: composition of fields, functions
@@ -66,12 +66,13 @@ The core syntax of the \ac{fc} is shown in figure \ref{fig:fc-syntax}, where we 
 \begin{itemize}
     \item a program \textit{P}, consisting of a sequence of function declarations and a main expression;
     \item function declarations \textit{F}, which consists of the name of the function d, a list of variables $\bar{x}$ representing parameters, and a function body e;
-    \item expressions \textit{e} model an entire field evolution. A more detailed explanation of expressions is given later in this section;
+    \item expressions \textit{e} model an entire field evolution. A more detailed explanation of expressions is given in section \ref{subsec:fc-semantics};
     \item a value \textit{v} can be either a \textit{neighboring field} $\phi$ or a \textit{local value} l. When the device $\delta$ fires, l represents data produced by $\delta$, while $\phi$ represents a field that maps neighbors of $\delta$ to their local values;
     \item in a higher-order extension of the model proposed in \cite{10.1145/3285956}, \textit{l} can be either a data value or a function value;
 \end{itemize}
 
 \subsection{Informal Semantics}
+\label{subsec:fc-semantics}
 Hereby are presented the four core field manipulation expressions, previously mentioned in the section \ref{subsec:fc-syntax}:
 
 \begin{itemize}
@@ -112,7 +113,7 @@ ScaFi, as a software artifact, consists of Scala DSL and API modules for writing
 \begin{itemize}
     \item \textbf{scafi-commons}: provides basic abstractions and utilities such as temporal and spatial abstractions;
     \item \textbf{scafi-core}: provides the aggregate programming DSL, consisting of syntax, semantics and a virtual machine together with a standard library of functions;
-    \item \textbf{scafi-stlib-ext}: provides extra functionalities that requires external dependencies and hence are kept separate from the core;
+    \item \textbf{scafi-stlib-ext}: provides extra functionalities that require external dependencies and hence are kept separate from the core;
     \item \textbf{scafi-simulator}: provides a basic support for simulating aggregate systems;
     \item \textbf{scafi-simulator-gui}: provides a graphical user interface for the simulator;
     \item \textbf{spala}: provides an actor-based aggregate computing middleware based on the Akka framework;
