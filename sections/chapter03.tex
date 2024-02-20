@@ -4,3 +4,34 @@
 
 \chapter{Analysis and Requirements}
 \label{chap:requirements}
+In this chapter, we will present the goal of this thesis and describe how it will be achieved. From here, an organized structure of requirements will be presented.
+
+\section{Thesis' Goal}
+\label{sec:goal}
+This thesis is within the same scope and ambit as the RustFields project, i.e. enabling the execution of aggregated programs on thin devices that would not support the JVM.
+Specifically, this thesis aims to continue in this direction through the development of three objectives:
+
+\begin{enumerate}
+    \item \label{obj:1} test, validate and improve the design of the RuFi-core module;
+    \item \label{obj:2} develop a new module, RuFi-distributed, that will enable the distributed execution of aggregate programs within a network of devices;
+    \item \label{obj:3} develop and test an aggregate program that can be executed on a network of devices.
+\end{enumerate}
+
+\section{Requirements Breakdown Structure}
+\label{sec:rbs}
+From the thesis' goal and objectives, it is possible to devise a set of tasks that need to be accomplished. Each task can be further refined in sub-tasks that constitute the requirements for the main task completion.
+Following this approach, a complete breakdown of the requirements emerges, as shown in this section.
+
+\begin{enumerate}
+    \item \textbf{RuFi-core}: this requirement category is related to the objective \ref{obj:1}: testing and improving the RuFi-core module.
+    \begin{enumerate}
+        \item \textbf{Validation}:
+            \begin{enumerate}
+                \item expand the "by_round" test suite;
+                \item implement functions to assert the equivalence of two aggregate programs;
+                \item expand the test suite with "by_equivalence" tests;
+            \end{enumerate}
+    \end{enumerate}
+    \item \textbf{RuFi-distributed}
+    \item \textbf{Aggregate Program}
+\end{enumerate}
