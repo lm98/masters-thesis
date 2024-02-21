@@ -9,12 +9,13 @@ In this chapter, we will present the goal of this thesis and describe how it wil
 \section{Thesis' Goal}
 \label{sec:goal}
 This thesis is within the same scope and ambit as the RustFields project, i.e. enabling the execution of aggregated programs on thin devices that would not support the JVM.
-Specifically, this thesis aims to continue in this direction through the development of three objectives:
+Specifically, this thesis aims to continue in this direction through the development of four objectives:
 
 \begin{enumerate}
-    \item \label{obj:1} test, validate and improve the design of the RuFi-core module;
+    \item \label{obj:1} test, validate and possibly improve the design of the RuFi-core module;
     \item \label{obj:2} develop a new module, RuFi-distributed, that will enable the distributed execution of aggregate programs within a network of devices;
-    \item \label{obj:3} develop and test an aggregate program that can be executed on a network of devices.
+    \item \label{obj:3} develop and test an aggregate program that can be executed on a network of devices;
+    \item \label{obj:4} implement a demonstration of the whole system's functioning.
 \end{enumerate}
 
 \section{Requirements Breakdown Structure}
@@ -25,13 +26,40 @@ Following this approach, a complete breakdown of the requirements emerges, as sh
 \begin{enumerate}
     \item \textbf{RuFi-core}: this requirement category is related to the objective \ref{obj:1}: testing and improving the RuFi-core module.
           \begin{enumerate}
-              \item \textbf{Validation}:
+              \item expand the "by round" test suite;
+              \item implement functions to assert the equivalence of two aggregate programs;
+              \item expand the test suite with "by equivalence" tests;
+              \item explore the possibility of simplifying the development of aggregate programs via Rust's macros;
+          \end{enumerate}
+    \item \textbf{RuFi-distributed}: this requirement category is related to the objective \ref{obj:2}: developing the RuFi-distributed module.
+          \begin{enumerate}
+              \item design an abstraction for networking operations;
+              \item implement a structure to be exchanged as a message between processes or machines;
+              \item implement the serialization logic for Export;
+              \item design an abstraction for a message queue;
+              \item design an abstraction for neighbor discovery;
+              \item implement the computational model shown in \ref{par:comp-model};
+          \end{enumerate}
+    \item \textbf{Aggregate Program}: this requirement category is related to the objective \ref{obj:3}: developing and testing an aggregate program.
+          \begin{enumerate}
+              \item \textbf{Implementation}: implement a simple gradient aggregate program using core constructs and builtins:
                     \begin{enumerate}
-                        \item expand the "by round" test suite;
-                        \item implement functions to assert the equivalence of two aggregate programs;
-                        \item expand the test suite with "by equivalence" tests;
+                        \item implement the \texttt{mux} construct;
+                        \item implement the \texttt{foldhoodplus} builtin;
+                        \item implement the \texttt{gradient} program;
+                    \end{enumerate}
+              \item \textbf{Validation}: test and validate the aggregate program via unit testing;
+          \end{enumerate}
+    \item \textbf{Demonstration}: this requirement category is related to the objective \ref{obj:4}: implementing a demonstration of the whole system's functioning.
+          \begin{enumerate}
+              \item implement a simulation of the aggregate program execution locally on a single process;
+              \item implement a simulation of the aggregate program execution distributed across multiple processes hosted by the same machine;
+              \item implement a simulation of the aggregate program execution distributed across multiple machines;
+              \item \textbf{Reduce Memory Footprint}: this subset of requirements is an enabler for the main goal of bringing \ac{ac} to thin devices:
+                    \begin{enumerate}
+                        \item profile memory consumption;
+                        \item reduce clone operations inside function implementations where possible;
+                        \item change the core constructs and builtins to accept references to the Virtual Machine instead of owning it;
                     \end{enumerate}
           \end{enumerate}
-    \item \textbf{RuFi-distributed}
-    \item \textbf{Aggregate Program}
 \end{enumerate}
