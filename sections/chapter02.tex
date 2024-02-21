@@ -29,6 +29,8 @@ This calculus is based on the idea of ``expressing aggregate system behavior by 
 A key concept of Field Calculus is that these aggregate-level specifications can also be interpreted as a local set of rules that define the iterative asynchronous execution of \textit{computation rounds}.
 The local, round-based computational model for device $\delta$ consists of the following steps:
 
+\paragraph{Computational Model}
+\label{par:comp-model}
 \begin{enumerate}
     \item sleep for some time;
     \item gather incoming messages from neighbors in the form of \textit{neighboring fields} mapping neighbors identifiers to their shared computation values;
@@ -94,7 +96,7 @@ Hereby are presented the four core field manipulation expressions, previously me
 
 
 \section{The ScaFi Framework}
-\ac{scafi} is one of the most actively researched and maintained implementations of \ac{ac}. 
+\ac{scafi} is one of the most actively researched and maintained implementations of \ac{ac}.
 It is hosted in the Scala language, a powerful and expressive \ac{jvm}-based language that brings functional programming to the JVM ecosystem with the aim of achieving expressiveness, safety and scalability.
 Although \ac{scafi} is not the only \ac{ac} implementation, compared to other aggregate programming languages it ``provides a more high-level platform that
 might support agile prototyping for research and easier integration with other tools and environments for distributed systems
@@ -308,6 +310,19 @@ The developer can also implement the Iterator trait for his custom types, enabli
     \item \textbf{Consumer Adaptors}: these are methods that take ownership of the iterator because they traverse it using its next method, thus consuming it. Examples of consumer adaptors are reducing methods like \textit{sum};
     \item \textbf{Iterator Adaptors}: these are methods that don't take ownership of the iterator, since they take an iterator and return another, modified one. An example of an iterator adaptor is the \textit{map} method, which applies a function to each element of the iterator;
 \end{itemize}
+
+\subsection{Metaprogramming in Rust}
+In computer science, \textit{metaprogramming} is the technique by which a programmer can write code that generates or manipulates other code. In Rust, this technique is enabled
+by its powerful \textit{macro} system. There are two main families of macros in Rust: declarative macros and procedural macros.
+
+\subsubsection{Declarative Macros}
+Declarative macros are the most common type of macros in Rust. They are invoked similarly to functions, however, they can have a variable number of arguments and can be called with different types of parenthesis.
+At their core, declarative macros are similar to match expressions, but instead of matching against a value, they match against the Rust code that is passed to the macro, which can also include but it's not limited to expressions.
+The listing \ref{lst:declarative_macros} shows an example of a declarative macro that implements the \textit{vec!} macro.
+
+\lstinputlisting[language=Rust, label={lst:declarative_macros}]{listings/declarative_macros.rs}
+
+This thesis will not introduce the reader to procedural macros, as they constitute a deeply technical topic that is not relevant to the scope of this work.
 
 \subsection{Why Rust}
 As shown in the previous sections, Rust is a general-purpose programming language designed with a focus on safety, speed and efficiency. These design principles, coupled with high-level features
