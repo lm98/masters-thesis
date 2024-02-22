@@ -7,6 +7,7 @@ component path
 component slot
 component execution
 component lang
+component macros
 context ..> export
 slot <.up. path
 export ..> path
@@ -18,4 +19,5 @@ context <.up. round_vm
 execution ..> round_vm
 lang ..> round_vm
 lang ..> slot
+macros ..> lang
 @enduml
