@@ -1,0 +1,14 @@
+@startuml
+component network as nt
+component mailbox as mb
+component discovery as ds
+component platform as pt
+component time as tt
+component message as ms
+
+pt ..> nt
+pt ..> mb
+pt ..> tt
+pt ..> ds
+mb ..> ms
+@enduml
