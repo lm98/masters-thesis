@@ -1,0 +1,13 @@
+@startuml
+component rufi {
+    component rf_core as rfc
+    component rf_distributed as rfd
+    component rf_distributed_impl as rfi
+    component rf_gradient as rfg
+}
+
+rfd ..> rfc
+rfi ..> rfd
+rfi ..> rfc
+rfg ..> rfc
+@enduml
