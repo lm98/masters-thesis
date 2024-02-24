@@ -9,6 +9,31 @@ the detailed design, where the system will also be described in terms of behavio
 
 \section{Architectural Design}
 \label{sec:architectural-design}
+In this section, we will present and discuss RuFi's architectural design, shown in figure \ref{fig:rufi-architecture}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/diagrams/img/rufi-architecture.png}
+    \caption{RuFi's architectural design}
+    \label{fig:rufi-architecture}
+\end{figure}
+
+In the figure, we can see the following components:
+
+\begin{itemize}
+    \item \textbf{rf-core}: this component defines key abstractions, such as the fundamental aggregate operators, builtins and a virtual machine;
+    \item \textbf{rf-distributed}: this component defines concepts related to the distributed execution of aggregate programs.
+          In particular, it defines core abstractions related to networking and message passing, as well as an implementation of the computational model discussed in \ref{par:comp-model};
+    \item \textbf{rf-distributed-impl}: this component exposes a standard implementation for the concepts defined in \textbf{rf-distributed}.
+          The choice of separating the abstraction definitions and the implementations will be discussed in section \ref{subsec:rufi-distributed};
+    \item \textbf{rf-gradient}: this component is a library exposing the gradient algorithm as an aggregate program.
+    \item \textbf{rufi}: this component, which serves as the main user interface with the framework, re-exports all the other components under a coherent namespace.
+\end{itemize}
+
+\subsection{RuFi Core}
+
+\subsection{RuFi Distributed}
+\label{subsec:rufi-distributed}
 
 \section{Detailed Design}
 \label{sec:detailed-design}
@@ -16,63 +41,3 @@ the detailed design, where the system will also be described in terms of behavio
 \subsection{Behavior}
 
 \subsection{Interaction}
-
-\subsection*{The Colored Function Problem}
-In his article series, Bob Nystrom talks about the problem with special syntax functions in programming languages through the \textit{colored function problem} \cite{003}.
-
-Let's imagine a language that has, as most languages do, syntax for defining functions:
-
-\begin{lstlisting}
-    function evra_function() {
-        return "I love this programming language!"
-    }
-\end{lstlisting}
-
-And supports higher-order functions:
-
-\begin{lstlisting}
-    function call_twice(fn) {
-        fn();
-        fn();
-    }
-\end{lstlisting}
-
-This language has also some special rules: functions
-\begin{lstlisting}
-    fn red();
-    fn blue();
-\end{lstlisting}
-
-Then, imagine that the two functions need to be called in different ways:
-
-\begin{lstlisting}
-    red();
-    blue[];
-\end{lstlisting}
-
-And finally, suppose that you can call red functions only within red functions, whereas for blue functions, you can call them within both red and blue functions:
-
-\begin{lstlisting}
-    // This is allowed
-    fn red_fun() {
-        blue_fun[];
-    }
-
-    // This is also allowed
-    fn red_fun() {
-        another_red_fun();
-    }
-
-    // This is allowed
-    fn blue_fun[]] {
-        another_blue_fun[]];
-    }
-
-    // This is NOT allowed
-    fn blue[] {
-        red();
-    }
-\end{lstlisting}
-
-The end result of this is that if you choose a function to be red, any other function that interacts with it needs to be red. The same applies to languages that have special syntax functions
-like Rust's async/await: having an async function means it can be called only from other async functions.
