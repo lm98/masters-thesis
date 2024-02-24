@@ -1,0 +1,43 @@
+@startuml
+
+interface "RoundVM" as RVM {
+    + nest<A>(slot: Slot, fun: =>A): A
+}
+
+interface "Export" as EX {
+    + ast: Map<Path, Any>
+}
+
+interface "Context" as CTX {
+    + self_id: ID
+    + exports: Map<ID, Export>
+    + local_sensors: Map<SensorID, Any>
+    + nbr_sensors: Map<SensorID, Map<ID, Any>>
+}
+
+class "Path" as PTH {
+    - slots: List<Slot>
+}
+
+enum "Slot" as SL {
+    Nbr
+    Rep
+    Foldhood
+    Branch
+}
+
+interface "VMStatus" as VMS {
+    + path: Path
+    + index: Int
+    + current_neighbor: Option<ID>
+    + stack: List<(Path, Int, Option<ID>)>
+}
+
+CTX "1" -- "many" EX
+PTH "1" -- "many" SL
+EX "1" -- "many" PTH
+RVM "1" -- "1" CTX
+RVM "1" -- "1" VMS
+VMS "1" -- "many" PTH
+
+@enduml
