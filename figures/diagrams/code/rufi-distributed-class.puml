@@ -1,0 +1,42 @@
+@startuml
+interface "Network " as NT {
+    + send(msg: Message)
+    + receive(): Map<ID, Message>
+}
+
+interface "Mailbox" as MB {
+    + enqueue(msg: Message)
+    + messages(): Map<ID, Message>
+}
+
+interface "Discovery" as DS {
+    + discover(): List<ID>
+}
+
+interface "Time" as TM {
+    + now(): SystemTime
+    + sleep()
+}
+
+interface "NbrSensorSetup" as NBS {
+    + setupSensors(nbrs: List<ID>): Map<SensorID, Map<ID, Any>> 
+}
+
+interface "Platform" as PL {
+    + runForever<A>(program: RoundVM => A)
+    + runCycles<A>(n: Int, program: RoundVM => A)
+}
+
+class "Message" as MSG {
+    + source: ID
+    + export: Export
+}
+
+NT "1" -- "1" MB
+NT "1" -- "many" MSG
+MB "1" --right "many" MSG
+PL "1" -- "1" NT
+PL "1" --up "1" NBS
+PL "1" -- "1" TM
+PL "1" -- "1" DS
+@enduml

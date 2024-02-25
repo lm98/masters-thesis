@@ -1,0 +1,22 @@
+@startuml
+participant Device as D
+participant Network as NT
+participant Broker as B
+
+activate D
+activate B
+create NT
+
+D -> NT : new(nbr_topics)
+NT -> B : subscribe(nbr_topics)
+B -> B
+
+alt succesful case
+    B --> NT : Ok
+    NT --> D : Ok(network)
+
+else subscription failure
+    B --> NT : Err(cause)
+    NT --> D : Err(cause)
+end
+@enduml

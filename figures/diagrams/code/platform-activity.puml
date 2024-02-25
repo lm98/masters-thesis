@@ -1,0 +1,14 @@
+@startuml
+start
+while (Stop condition)
+    :0.1: Discover neighbors;
+    :0.2: Register neighbors;
+    :0.3: Setup neighboring sensors;
+    :1: Retrieve neighboring messages;
+    :2.1: Create the Context for the current round;
+    :2.2: Compute the aggregate program's result;
+    :3: Send Export to neighbors;
+    :4: Sleep;
+endwhile
+stop
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+participant Device_1 as D1
+participant Device_i as Di
+participant Broker as B
+participant Network_i as Ni
+activate D1
+activate Di
+activate B
+
+Di -> B : subscribe(D_1)
+B --> Di : Ok
+D1 -> D1 : exec_cycle
+D1 -> B : publish(Export_D_1)
+Di -> Di : exec_cycle
+B -> Ni : Export_D_1
+Ni -> Ni : enqueue_in_mailbox(Export_D_1)
+Di -> Ni : messages
+Ni --> Di : messages
+Di -> Di : exec_cycle
+@enduml

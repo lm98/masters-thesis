@@ -11,7 +11,7 @@ the detailed design, where the system will also be described in terms of behavio
 \label{sec:architectural-design}
 In this section, we will present and discuss RuFi's architectural design, shown in figure \ref{fig:rufi-architecture}.
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/diagrams/img/rufi-architecture.png}
     \caption{RuFi's architectural design}
@@ -34,7 +34,7 @@ In the figure, we can see the following components:
 As mentioned in \ref{sec:architectural-design}, the module RuFi Core contains all the fundamental abstractions needed to start writing and evaluating aggregate programs.
 Its structure is represented by the diagram in figure \ref{fig:rufi-core-architecture}.
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.5\textwidth]{figures/diagrams/img/rufi-core-architecture.png}
     \caption{RuFi Core's architectural design}
@@ -54,7 +54,7 @@ Its structure is represented by the diagram in figure \ref{fig:rufi-core-archite
 This module, as described in \ref{sec:architectural-design}, defines concepts related to the distributed execution of aggregate programs.
 Its structure is represented by the diagram in figure \ref{fig:rufi-distributed-architecture}.
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/diagrams/img/rufi-distributed-architecture.png}
     \caption{RuFi Distributed's architectural design}
@@ -82,7 +82,7 @@ The Round Virtual Machine is the operating heart of the RuFi framework. It is re
 Each core language construct leverages the VM functionalities in its implementation.
 In the class diagram in figure \ref{fig:round-vm-class}, we can see the elements that compose the VM.
 
-\begin{figure}[ht]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/diagrams/img/round-vm-class.png}
     \caption{Round VM class diagram}
@@ -93,22 +93,85 @@ The Slot is a representation of a core construct of the \ac{ac} inside the \ac{a
 A level above, the Export represents the entire \ac{ast} of the aggregate program, decorated with the value computed at each Path. The Export is also shared between neighbors during each
 computation round.\\
 The VMStatus encapsulates the execution state: it has a representation of the execution stack and the current Path being evaluated.\\
-The Context represents the execution context for the device and contains relevant information such as the device identifier, and the device's sensors alongside the exports of all the neighborhood.\\
-Above all, the RoundVM is responsible for generating the \ac{ast} and evaluate functions, and it does so with the \textit{nest} function, which gets executed when an aggregate program is called
+The Context represents the execution context for the device and contains relevant information such as the device identifier, and the device's sensors alongside the exports of all the neighborhood.
+This means that during the computation process, each device has the \ac{ast} of its neighbors. This aspect is crucial to implement neighboring operations.\\
+Above all, the RoundVM is responsible for generating the \ac{ast} and evaluate functions, and it does so with the \textit{nest} \ref{lst:nest} function, which gets executed when an aggregate program is called
 and causes the VM to push a new Slot into the current Path.
+
+\lstinputlisting[language=Rust, label={lst:nest}]{listings/nest.rs}
 
 \subsubsection{Language}
 The language includes all the core constructs and built-in functions. Since each core construct call grows the \ac{ast} by one Slot, each language construct and built-in function has
-a dependency on the RoundVM, and this is reflected in their signatures. For example the $nbr\{e\}$ function, now 
+a dependency on the RoundVM, and so do the expressions that can be passed to them. This is reflected in their signatures, as shown in listing \ref{lst:lang}.
+
+\lstinputlisting[language=Rust, label={lst:lang}]{listings/lang.rs}
 
 \subsection{RuFi Distributed}
-%NETWORK, PLATFORM
+As mentioned before, the Distributed module of RuFi has the goal of enabling the distributed execution of aggregate programs. A key concept defined in this module to reach this goal is the Platform.
+This structure is responsible for managing the execution cycle of the aggregate programs, as well as the communication between neighbors, doing so by leveraging the other concepts defined in the module.
+A representation of the main concepts in the module is shown in figure \ref{fig:distributed-class}.
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/diagrams/img/rufi-distributed-class.png}
+    \caption{RuFi Distributed class diagram}
+    \label{fig:distributed-class}
+\end{figure}
+
+A more detailed explanation of the module's component will be given in sections \ref{subsec:behavior} and \ref{subsec:interaction}.
 
 \subsection{Behavior}
-%Platform execution cycle w/ activity diagram
+\label{subsec:behavior}
+In this section, we will showcase the behavior of a device when executing an aggregate program, which is represented by the activity diagram in figure \ref{fig:behavior}.
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/diagrams/img/platform-activity.png}
+    \caption{Device behavior}
+    \label{fig:behavior}
+\end{figure}
+
+The activities represented in the diagram \ref{fig:behavior} closely resemble the computational model in \ref{par:comp-model}.
+Also, the proposed behavior represents a synchronous execution cycle, where all the steps are performed in a sequential order. It is possible to extend this design
+to support the asynchronous execution of some of the steps like the discovery process, which could be done in parallel with the computation cycle. However, this solution would require the employment of an asynchronous runtime, which is a requirement that can be costly for certain device architectures. As such, the proposed design
+takes into account the synchronous case, leaving the asynchronous one to future developments.
 
 \subsection{Interaction}
-%Neighbor communication w/ sequence diagram
+\label{subsec:interaction}
 
+In this section, we will describe the interaction between devices during the distributed execution of an aggregate program, focusing in particular on the networking operations design.
+Although there is no strict requirement for the communication protocol between devices, the proposed design models the interaction between nodes via a publish-subscribe model akin to the one used in popular protocols like MQTT.
+As such, the following sequence diagrams will feature a Broker participant, whose design falls out of this thesis' scope, who is responsible for forwarding and broadcasting messages between devices.
+
+\subsubsection{Network Creation}
+The behavior of the system when a device is added to the network is represented by the sequence diagram in figure \ref{fig:network-creation}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/diagrams/img/activity-network-creation.png}
+    \caption{Network creation}
+    \label{fig:network-creation}
+\end{figure}
+
+\begin{enumerate}
+    \item The device first instantiates a new Network with an initial list of discovered neighbor topics;
+    \item The Network subscribes to the neighbors' topics via the Broker;
+    \item If the subscription is successful, a reference to the Network is returned to the device; if not, an error is returned instead.
+\end{enumerate}
+
+\subsubsection{Message Passing}
+The behavior of the system when a device sends a message to its neighbors is represented by the sequence diagram in figure \ref{fig:message-passing}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/diagrams/img/activity-message-passing.png}
+    \caption{Message passing}
+    \label{fig:message-passing}
+\end{figure}
+
+\begin{enumerate}
+    \item The Device i subscribes to the topic of Device 1;
+    \item when Device 1 publishes a message, the Broker forwards it to Device i via its Network instance;
+    \item when Device i starts a new computation cycle, one of the first steps is to check the mailbox for incoming messages;
+    \item the Device i finds the message from Device 1 with its Export, adding it to its Context for the current computation cycle.
+\end{enumerate}
