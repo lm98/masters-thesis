@@ -7,8 +7,9 @@ component time as tt
 component message as ms
 
 pt ..> nt
-pt ..> mb
+nt ..> mb
 pt ..> tt
 pt ..> ds
-mb ..> ms
+nt ..> ms
+mb .right.> ms
 @enduml
