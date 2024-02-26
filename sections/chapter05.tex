@@ -4,10 +4,67 @@
 
 \chapter{Implementation}
 \label{chap:Implementation}
+This chapter aims to provide an overview of important implementation choices, as well as highlight the technologies used to develop the RuFi framework.
 
 \section{Crate Structure}
-%TODO parla della struttura del crate e di come importare tutto in un nuovo progetto
+At the highest level, the framework consists of multiple \textit{library crates}. In Rust, a crate is a standalone module that can be included as a dependency inside a project via
+the \texttt{cargo} package manager. There are three types of crates in Rust:
+
+\begin{itemize}
+    \item \textit{Binary crates} are crates that can be compiled into an executable.
+          An example of a binary crate can be a program that runs on a device and utilizes the RuFi framework.
+    \item \textit{Library crates} are crates that can be used as a dependency in other projects.
+    \item \textit{Proc Macro crates} are library crates that expose procedural macros.
+\end{itemize}
+
+The development of RuFi followed a convention that is common in the Rust community for large projects, and that is the use of a \textit{workspace}.
+A workspace is a directory that contains multiple Rust crates, and it is defined by a \texttt{Cargo.toml} file that lists the crates that are part of the workspace.
+Apart from this detail, each crate inside the workspace is a standalone Rust project with its specific dependency management and build configuration.
+In particular, there are five different library crates in the RuFi workspace:
+
+\begin{itemize}
+    \item \texttt{rf-core} contains the RuFi core implementation.
+    \item \texttt{rf-distributed} contains the RuFi distributed implementation.
+    \item \texttt{rf-gradient} contains the implementation of the gradient aggregate program.
+    \item \texttt{rf-distributed-impl} contains an implementation for the traits defined inside rf-distributed.
+    \item \texttt{rufi} has a dependency on all the other crates and re-exports them under a common namespace. Thanks to Rust conditional compilation,
+          it is possible to conditionally include or exclude entire modules from the dependency tree via the mechanism of \texttt{cargo features}, making this
+          crate a convenient tool to access all the framework functionalities in a single, configurable dependency.
+\end{itemize}
 
 \section{RuFi Core}
+This section will provide an overview of the implementation details for the RuFi core crate.
+
+\subsection{RoundVM}
+One of the most important functions of the RoundVM is the \textit{nest} function. 
+
+\subsection{Language}
 
 \section{RuFi Distributed}
+
+\section{Networking}
+
+
+\section{RuFi Gradient}
+The RuFi Gradient crate contains an important example of what an aggregate program in RuFi can be and what it looks like. Since one of the core premises of \ac{fc} is to
+provide key and reusable building blocks for aggregate computations, an aggregate program is nothing more than a function that combines these building blocks to achieve the
+desired behavior. The aggregate program could then be used as a building block in a larger aggregate program, and so on.
+
+The listing \ref{lst:rufi_gradient} shows the implementation of the RuFi Gradient aggregate program:
+
+\lstinputlisting[language=Rust, label={lst:rufi_gradient}]{listings/rufi_gradient.rs}
+
+The core functions used in this program are:
+
+\begin{itemize}
+    \item \textit{rep}: the operator that denotes a dynamically changing field;
+    \item \textit{mux}: a branch variant that computes both the branches and returns the result of the branch that is selected by the condition. Since both branches of the operators
+          are executed by the device, this construct does not restrict the domain like the \textit{branch} operator. Instead, it is used for simple conditional expressions;
+    \item \textit{foldhood plus}: a variant of the foldhood operator that excludes the device from its neighborhood.
+\end{itemize}
+
+The \textit{is source} function calls the Virtual Machine and reads a sensor that establishes if the device is a source.
+The aggregate program itself is a rep operation that has an initial value for the distance d equal to $0.0$.
+Then, inside the repetition, there is a \textit{mux} call that returns a value of $0.0$ if the device is a source or else an aggregation between neighboring values is performed via the \textit{foldhood plus} builtin, resulting in the minimum distance $d + 1.0$ being kept as a result of the whole computation.
+In this way, the immediate neighbors of the source will compute a value of $0.0 + 1.0$, and the neighbors of the neighbors will compute $1.0 + 1.0$, and so on.
+For non-source devices that are not indirect neighbors of the source, the final result will be the starting value for the foldhood operator of $f64::INFINITY$.
