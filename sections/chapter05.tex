@@ -3,7 +3,7 @@
 % !TeX root = ../thesis-main.tex
 
 \chapter{Implementation}
-\label{chap:Implementation}
+\label{chap:implementation}
 This chapter aims to provide an overview of important implementation choices, as well as highlight the technologies used to develop the RuFi framework.
 
 \section{Crate Structure}
@@ -33,14 +33,87 @@ In particular, there are five different library crates in the RuFi workspace:
 \end{itemize}
 
 \section{RuFi Core}
-This section will provide an overview of the implementation details for the RuFi core crate.
 
 \subsection{RoundVM}
-One of the most important functions of the RoundVM is the \textit{nest} function. 
+The listing \ref{lst:round_vm} shows the Round Virtual Machine, which is represented by a Rust struct that contains every dependency needed for executing its behavior.
+
+\lstinputlisting[language=Rust, label={lst:round_vm}]{listings/round_vm.rs}
+
+One of the most important functions of the RoundVM is the \textit{nest} function, which we can see in the listing \ref{lst:nest}.
+
+\lstinputlisting[language=Rust, label={lst:nest}]{listings/nest.rs}
+
+The nest function takes as the parameters:
+
+\begin{itemize}
+    \item \textit{self}: a mutable reference to Self, the RoundVM;
+    \item \textit{slot}: the slot that should be written inside the Export;
+    \item \textit{expr}: an expression. In RuFi, expressions have the added parameter of a mutable reference to the RoundVM, since they may be language constructs, as will be later
+          explained in this section;
+    \item \textit{write}: a boolean flag that determines if the value of the expression should be written in the Export.
+    \item \textit{inc}: a boolean flag that determines if the index of the AST's Slot in the VMStatus should be incremented.
+\end{itemize}
+
+The behavior of the function can be summarized as follows:
+
+\begin{enumerate}
+    \item push the slot onto the current Path in VMStatus;
+    \item compute expr result;
+    \item if write is true, check if the export has a value for the current path, if not, write the result to the export;
+    \item if inc index is true, increment the index of the VMStatus (for ast navigation);
+    \item return the expr result.
+\end{enumerate}
 
 \subsection{Language}
+The first strategy that can come to mind for implementing the Language would be to have a Rust trait named ``Language'' that contains all the language constructs as methods, and then implement
+it for the RoundVM via an \textit{impl Language for} block.
+
+However, this approach has a major drawback: in fact, it clashes with Rust's borrowing rules.
+The listing \ref{lst:bad_language} shows an erroneous attempt to implement the Language trait for the RoundVM.
+
+\lstinputlisting[language=Rust, label={lst:bad_language}]{listings/bad_language.rs}
+
+The code shown so far is valid Rust code, but when attempting to implement an aggregate program with this implementation, the flaws of this approach become evident, as
+shown in the listing \ref{lst:bad_language_usage}.
+
+\lstinputlisting[language=Rust, label={lst:bad_language_usage}]{listings/bad_language_usage.rs}
+
+The problematic line of code is the last one, when we try to pass an aggregate construct to the first nbr function. Since methods are not pure functions in Rust,
+we need to pass a closure that captures the outer vm variable, on which we can then call another aggregate construct. However, in order for the vm variable to be
+captured, it needs to implement the Copy trait, because the closure needs to have ownership of captured variables. Unfortunately, the RoundVM struct cannot implement the
+Copy trait, since it contains the Export struct, which contains a HashMap that has a non-Copy type as a value:
+
+\begin{lstlisting}
+    pub struct Export {
+        pub slots: HashMap<Path, Rc<Box<dyn Any>>>,
+    }
+\end{lstlisting}
+
+Since the size of Any values cannot be known at compile-time, any structure that contains references to Any values cannot implement the Copy trait.
+It is however possible for them to implement the Clone trait, via the smart pointer ``Rc''.
+
+The code in the following listing will then compile:
+
+\begin{lstlisting}
+    let result = vm.nbr(|| vm.clone().nbr(|| 0));
+\end{lstlisting}
+
+However, this solution has a major problem: whenever a structure is cloned, the entire structure in memory is duplicated, meaning that every time the developer of an aggregate program
+passes an aggregate construct to another, the memory footprint of the program will increase.
+
+The proposed implementation utilizes another approach: each aggregate construct and built-in function is a pure Rust function that takes a mutable reference to the RoundVM as a parameter.
+Each expression that can be passed to an aggregate construct would then need a mutable reference to the RoundVM as a parameter as well. In this way, we can combine aggregate constructs
+without the need to copy or clone the RoundVM, making the code more memory-efficient. The listing \ref{lst:lang_impl} shows the current implementation of the Language.
+
+\lstinputlisting[language=Rust, label={lst:lang_impl}]{listings/lang_impl.rs}
 
 \section{RuFi Distributed}
+The \texttt{rf-distributed} and \texttt{rf-distributed-impl} crates are responsible for realizing the distributed execution of RuFi programs. The first crate contains the definition of all the traits
+that are needed for this purpose, such as Network, Mailbox and Time, as well as an implementation of the Platform, since it is generic in those traits. The second crate contains an implementation of the traits
+defined in the first crate. The choice of having two separate crates is due to the fact that the implementation of some of the traits can be platform specific. For example, the rf-distributed-impl crate
+utilizes a popular MQTT library named Rumqtt \cite{005} to implement the Network trait. However, this library isn't compatible to all architectures. Other very popular and widely used, libraries like
+the de-facto standard asynchronous runtime Tokio \cite{004} aren't fully compatible with the entirety of devices architectures. As such, the rf-distributed-impl crate is separated
+from the rf-distributed crate so it can be replaced with a different implementation if needed.
 
 \section{Networking}
 

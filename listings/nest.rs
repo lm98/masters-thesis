@@ -1,16 +1,37 @@
-// Inside VM
-fn nest<A, F>(&mut self, slot: Slot, expr: F, inc_index: bool, write: bool) -> A
-where
-    F: Fn(&mut RoundVM) -> A,
-{
-    // push the slot onto the current Path in VMStatus
-
-    // compute expr result
-
-    // if write is true, check if the export has a value for the current path
-    // if not, write the result to the export
-
-    // if inc_index is true, increment the index of the VMStatus (for ast navigation)
-
-    // return the expr result
+impl RoundVM {
+    // other RoundVM methods
+    
+    pub fn nest<A: Clone + 'static + FromStr, F>(
+        &mut self,
+        slot: Slot,
+        write: bool,
+        inc: bool,
+        expr: F,
+    ) -> A
+    where
+        F: Fn(&mut RoundVM) -> A,
+    {
+        self.status.push();
+        self.status.nest(slot);
+        let val = expr(self);
+        let res = if write {
+            let cloned_path = self.status.path().clone();
+            self.export_data()
+                .get::<A>(&cloned_path)
+                .unwrap_or(
+                    self.export_data()
+                        .put_lazy_and_return(cloned_path, || val.clone()),
+                )
+                .clone()
+        } else {
+            val
+        };
+        if inc {
+            self.status.pop();
+            self.status.inc_index();
+        } else {
+            self.status.pop();
+        }
+        res
+    }
 }
