@@ -96,9 +96,7 @@ The VMStatus encapsulates the execution state: it has a representation of the ex
 The Context represents the execution context for the device and contains relevant information such as the device identifier and the device's sensors alongside the exports of all the neighbors.
 This means that during the computation process, each device has the \ac{ast} of its neighbors. This aspect is crucial to implement neighboring operations.\\
 Above all, the RoundVM is responsible for generating the \ac{ast} and evaluate functions, and it does so with the \textit{nest} \ref{lst:nest} function, which gets executed whenever a core construct is called
-and causes the VM to push a new Slot into the current Path.
-
-\lstinputlisting[language=Rust, label={lst:nest}]{listings/nest.rs}
+and causes the VM to push a new Slot into the current Path. A more detailed explanation of this function will be given in chapter \ref{chap:implementation}.
 
 \subsubsection{Language}
 The language includes all the core constructs and built-in functions. Since each core construct call should grow the \ac{ast} by one Slot, each language construct and built-in function has
