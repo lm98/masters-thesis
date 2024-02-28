@@ -78,7 +78,7 @@ shown in the listing \ref{lst:bad_language_usage}.
 
 \lstinputlisting[language=Rust, label={lst:bad_language_usage}]{listings/bad_language_usage.rs}
 
-The problematic line of code is the last one, when we try to pass an aggregate construct to the first nbr function. Since methods are not pure functions in Rust,
+The problematic line of code is the last one when we try to pass an aggregate construct to the first nbr function. Since methods are not pure functions in Rust,
 we need to pass a closure that captures the outer vm variable, on which we can then call another aggregate construct. However, in order for the vm variable to be
 captured, it needs to implement the Copy trait, because the closure needs to have ownership of captured variables. Unfortunately, the RoundVM struct cannot implement the
 Copy trait, since it contains the Export struct, which contains a HashMap that has a non-Copy type as a value:
@@ -109,14 +109,53 @@ without the need to copy or clone the RoundVM, making the code more memory-effic
 
 \section{RuFi Distributed}
 The \texttt{rf-distributed} and \texttt{rf-distributed-impl} crates are responsible for realizing the distributed execution of RuFi programs. The first crate contains the definition of all the traits
-that are needed for this purpose, such as Network, Mailbox and Time, as well as an implementation of the Platform, since it is generic in those traits. The second crate contains an implementation of the traits
-defined in the first crate. The choice of having two separate crates is due to the fact that the implementation of some of the traits can be platform specific. For example, the rf-distributed-impl crate
+that are needed for this purpose, such as Network, Mailbox and Time, as well as an implementation of the Platform since it is generic in those traits. The second crate contains an implementation of the traits
+defined in the first crate. The choice of having two separate crates is because the implementation of some of the traits can be platform-specific. For example, the rf-distributed-impl crate
 utilizes a popular MQTT library named Rumqtt \cite{005} to implement the Network trait. However, this library isn't compatible to all architectures. Other very popular and widely used, libraries like
 the de-facto standard asynchronous runtime Tokio \cite{004} aren't fully compatible with the entirety of devices architectures. As such, the rf-distributed-impl crate is separated
 from the rf-distributed crate so it can be replaced with a different implementation if needed.
 
-\section{Networking}
+\subsection{Networking}
+One of the key abstractions that are present in RuFi Distributed is the \texttt{Network} trait. This trait is responsible for providing the logic by which devices can send and
+receive messages through the network. The listing \ref{lst:network} shows the definition of the Network trait.
 
+\lstinputlisting[language=Rust, label={lst:network}]{listings/network.rs}
+
+The strategy chosen to implement this trait is to have a struct that contains a rumqttc-based MQTT Client and wraps it to adhere to the trait. Upon creation, the struct will
+setup the MQTT Client and spawn a new thread that will handle incoming messages, which will need to be ``sent'' back to the Network's thread.
+
+In Rust, there are two ways for threads to communicate and share information, the first one of which is through the \texttt{message passing} paradigm. The main idea is represented by
+the slogan ``Do not communicate by sharing memory; instead, share memory by communicating''. To achieve this, Rust provides an implementation of the \textit{channel} abstraction,
+which is a general programming concept by which data is sent from one thread to another. Channels have two halves:
+
+\begin{itemize}
+    \item \textit{Sender}: a cloneable type that can be used to send messages to the channel.
+    \item \textit{Receiver}: a cloneable type that receives messages from the channel.
+\end{itemize}
+
+The usage of the channel abstraction is shown in the listing \ref{lst:channel}.
+
+\lstinputlisting[language=Rust, label={lst:channel}]{listings/channels.rs}
+
+So if we were to implement the communication between threads this way, the sender half of the channel would be passed to the thread that handles incoming messages (the ``handler thread''), and the receiver half will
+remain inside the Network instance to be used by client code to retrieve the messages (the ``client thread''). Whenever a packet is received from the handler thread, it will be sent to the receiver half of the channel.
+
+However, this approach has some drawbacks:
+
+\begin{enumerate}
+    \item the receiver half of the channel needs to be actively polled to retrieve the messages;
+    \item the channel is not bidirectional. This means that the handler thread cannot store the messages and send them all at once on demand.
+\end{enumerate}
+
+These drawbacks combined mean that the client thread would need to busy wait for a single message from the network at every execution cycle, so the proposed implementation
+utilizes a second approach: \texttt{shared state concurrency}. This is a programming paradigm that allows multiple threads to access the same shared state, and in Rust, it is done
+via the \textit{Mutex} abstraction. This way, the handler thread can directly and atomically push the incoming messages to the shared state upon arrival, and the client thread can request
+them all at once from the Network in a single call. Although programming concurrency through mutexes is generally avoided, especially in high-level languages, due to the complexity it can bring
+to the program, in this case, the mutex logic is confined to a relatively small portion of the code and is not exposed to the client, so it has been chosen as a valid option.
+
+The implementation for the Network trait exposed in the rf-distributed-impl crate is the one in the listing \ref{lst:network_impl}.
+
+\lstinputlisting[language=Rust, label={lst:network_impl}]{listings/network_impl.rs}
 
 \section{RuFi Gradient}
 The RuFi Gradient crate contains an important example of what an aggregate program in RuFi can be and what it looks like. Since one of the core premises of \ac{fc} is to
