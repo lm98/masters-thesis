@@ -1,0 +1,24 @@
+@startuml
+node RaspberryPi3 as RB {
+    card Device_3 as D3
+}
+node PCDesktop as LN {
+    card Device_1 as D1
+    card Device_2 as D2
+    card Device_4 as D4
+    card Device_5 as D5
+}
+
+node MosquittoBroker as BR
+
+D1 -right- D2: neighbor
+D2 -up- D3: neighbor
+D3 -down- D4: neighbor
+D4 -right- D5: neighbor
+
+D1 .. BR
+D2 .. BR
+D3 .. BR
+D4 .. BR
+D5 .. BR
+@enduml

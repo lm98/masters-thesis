@@ -42,7 +42,7 @@ Its structure is represented by the diagram in figure \ref{fig:rufi-core-archite
 \end{figure}
 
 \begin{itemize}
-    \item \textbf{round-vm}: This module defines a virtual machine for executing and evaluating aggregate programs and also other related concepts like the VM's status,
+    \item \textbf{round\_vm}: This module defines a virtual machine for executing and evaluating aggregate programs and also other related concepts like the VM's status,
           the path, the execution context and the device exports, all of which will be discussed in more detail in section \ref{sec:detailed-design};
     \item \textbf{lang}: this module defines the fundamental aggregate operators, such as \textit{rep}, \textit{nbr}, \textit{foldhood}, \textit{branch} and some important builtin functions like \textit{foldhood plus} and \textit{mux};
     \item \textbf{macros}: this module exports some declarative macros that aim to simplify the writing of aggregate programs;\
