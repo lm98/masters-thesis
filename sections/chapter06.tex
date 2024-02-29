@@ -4,3 +4,25 @@
 
 \chapter{Validation}
 \label{chap:validation}
+
+The validation for this thesis' work has been done on multiple axes, which will be described in this chapter.
+
+\section{Unit Testing}
+The first layer of testing is the ``Unit Testing''. In computer science, this term refers to the act of analyzing and scrutinizing the smallest units of software possible.
+This thesis adheres to Rust's unit testing practices: each public module that is part of the library has a corresponding and private testing module, annotated with the
+conditional compilation macro ``\#[cfg(test)]'', denoting this is a module that is only compiled when the test suite is run.\\
+Inside this module, it is possible to write test functions by annotating them with the ``\#[test]'' attribute. These functions can then be run with the ``cargo test'' command.\\
+As such, each module in the RuFi library crates has a corresponding testing module containing unit test functions for them. For example, the listing \ref{lst:unit_test} shows the unit tests for the
+vm\_status module.
+
+\lstinputlisting[language=Rust, label={lst:unit_test}]{listings/unit_test.rs}
+
+\section{Integration Testing}
+Unit testing is a crucial practice in the development of software artifacts, but testing each component in isolation is not sufficient to analyze every aspect of the software produced.
+Another important practice is the act of testing some or many components together, to ensure that their behavior when interacting is the one expected, which is called ``Integration Testing''.
+Again, this thesis adheres to Rust's integration testing practices: each library crate has a corresponding ``tests'' directory, where integration tests are written. These tests are run with the ``cargo test'' command, just like their unit counterpart\\
+Inside the tests directory, it is possible to create various source files TODO
+
+\section{Memory Profiling}
+
+\section{Quality Control}
