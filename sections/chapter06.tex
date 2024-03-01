@@ -31,7 +31,7 @@ The listing \ref{lst:integration_test} shows an example of an integration test f
 A third axes along which the thesis' work has been validated is the ``User Acceptance Testing'', which refers to the practice of testing the software in a real-world scenario.
 In particular, this involved the development of a demo project that exploits the RuFi framework to execute a gradient aggregate program within a network of 5 devices, each one
 represented by a process running on a machine. At an application level, the topology is linear, meaning each device $i$ is a neighbor of the devices $i+1$ and $i-1$, excluding 1 and 5
-which are the extremes of the topology. At a deployment level, there are four processes each one simulating a device run on a Desktop PC, while the fifth runs on a Raspberry Pi 3.\\
+which are the extremes of the topology. At a deployment level, there are four processes each one simulating a device running on a Desktop PC, while the fifth runs on a Raspberry Pi 3.\\
 Each process communicates with the others through the MQTT protocol via the public Mosquitto MQTT broker. A graphical representation of the network is shown in figure \ref{fig:network_topology}.
 
 \begin{figure}[ht!]
@@ -42,5 +42,7 @@ Each process communicates with the others through the MQTT protocol via the publ
 \end{figure}
 
 \section{Memory Profiling}
-
-\section{Quality Control}
+Another important aspect to consider while implementing a framework that aims to bring \ac{ac} to thin devices is memory usage. Although a deep and comprehensive analysis of
+the memory usage of the RuFi framework is beyond the scope of this thesis, a simple memory profiling with a particular focus on memory allocation spikes has been done to ensure that the framework does not consume an excessive amount of memory.
+In particular, the profiling has been executed for three different execution cycles of the gradient aggregate program: 100, 300 and 500, at a frequency of 60mhz and for two devices:
+the first is the device number 3. The results are shown in figure \ref{fig:memory_profiling}.
