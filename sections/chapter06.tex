@@ -45,4 +45,16 @@ Each process communicates with the others through the MQTT protocol via the publ
 Another important aspect to consider while implementing a framework that aims to bring \ac{ac} to thin devices is memory usage. Although a deep and comprehensive analysis of
 the memory usage of the RuFi framework is beyond the scope of this thesis, a simple memory profiling with a particular focus on memory allocation spikes has been done to ensure that the framework does not consume an excessive amount of memory.
 In particular, the profiling has been executed for three different execution cycles of the gradient aggregate program: 100, 300 and 500, at a frequency of 60mhz and for two devices:
-the first is the device number 3. The results are shown in figure \ref{fig:memory_profiling}.
+the device number 1 and the device number 3. These devices have been chosen because they have a different amount of neighbors, which means we can see how processing multiple neighboring messages
+can affect memory usage.
+
+The results are shown in figure \ref{fig:memory_profiling}. The first group of columns shows the memory usage for the device number 3, while the second group shows the memory usage for the device number 1.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/mem-spikes.png}
+    \caption{Memory profiling for the devices 3 and 1.}
+    \label{fig:memory_profiling}
+\end{figure}
+
+As we can see, the spike memory usage for the device with only one neighbor raises much slower than the one with two neighbors.
