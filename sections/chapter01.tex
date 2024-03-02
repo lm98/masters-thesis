@@ -8,9 +8,14 @@ The current trends from \ac{iot} are ushering in a new era for the interaction b
 and connection capabilities presents numerous opportunities and challenges. This environment has favored the birth of a new vision of the future of computing: \ac{pc} \cite{satyanarayanan2001pervasive}.
 According to this vision, computational resources, which are now deeply intertwined with the physical world to the point of being almost invisible, operate and coordinate in an increasingly
 dynamic environment, where decentralized and peer-to-peer interactions are expected to be increasingly important. In this world, the \ac{ac} paradigm offers an encouraging shift of focus on the design
-of the systems of the future, where the emphasis will now be on the global behavior of collections of devices, rather than on the individual devices themselves \cite{viroli2019aggregate}.
+of the systems of the future, where the emphasis will now be on the global behavior of collections of devices, rather than on the individual devices themselves \cite{7274429}.
 The development of this new field has already led to the creation of very important and well-researched computational models, languages and frameworks. However, the current state of the art in \ac{ac}
-frameworks is for the most part based on the Java Virtual Machine ...
+frameworks are for the most part based on the \ac{jvm}, exploiting its vast ecosystem. One important example of such a framework is ScaFi: a project that utilizes the JVM-based Scala language
+to deliver a powerful and flexible \ac{dsl} and toolkit for \ac{ac}. Nevertheless, relying on the \ac{jvm} has some drawbacks, one of the most important being the fact that it comes with additional costs in terms
+of memory and computational resources, which we cannot assume are always available on every device that could be part of the \ac{pc} vision. It is in this perspective that the Rust Fields project was born: to
+research and explore the possibility of taking advantage of the Rust Language well-known features of safety, performance and memory efficiency to develop an \ac{ac} framework that can be used on thin devices as well,
+and this thesis' work takes a step further in this direction by proposing the design and development of a Rust-based platform that will enable the distributed execution of aggregate programs written in Rust.
+It will do so by firstly validating and improving the existing core concepts and features of the Rust Fields framework, and then by implementing the necessary components to enable the distributed execution of aggregate programs.
 
 \paragraph{Structure of the Thesis}
 The structure of the thesis is designed to provide a basis for its context and objectives, and then use it as a foundation to fully describe the proposed solution.
