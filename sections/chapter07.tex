@@ -1,0 +1,25 @@
+\chapter{Conclusion}
+\label{chap:conclusions}
+In this thesis, we have presented the design and development of a distributed execution platform for the RustFields framework, which has the ultimate goal of bringing Aggregate Computing to resource-constrained devices.
+Starting by establishing a solid base regarding the context, paradigms and state-of-the-art for Aggregate Computing and a solid foundation of the Rust programming language concepts and idioms,
+we were able to identify a set of requirements and goals for this thesis project, which were then used as a guide during the design and development phases.
+Our analysis of the current state of the RustFields project has highlighted the need for validation and improvement of the current core library, as well as the need for a new module that would enable
+the distributed execution of Rust-based aggregate programs. With this consideration in mind, we have proposed the design of the new RustFields framework, RuFi, highlighting first the architectural design of the project and its main
+components, and then delving into the detailed design of such components. These designs were then used as a guideline for the implementation phase, where we highlighted some important tactical choices that were made.
+We also started collecting experimental data on memory usage of the current RustFields framework, which will be useful for future research and improvements.
+
+\section{Current Limitations}
+As of now, although the main goal of the thesis of providing a distributed execution platform for the RustFields framework has been achieved, the higher-level objective of bringing \ac{ac} on all thin devices is still not fully accomplished.
+Experiments on running the current RuFi framework in very resource-constrained devices like the Esp32 have shown that the current implementation is not yet suitable for such devices, as the memory usage is still too high, highlighting the need
+for further research and improvement on the memory footprint of such a framework.
+
+\section{Future Work}
+The previous analysis of the limitations of the current RuFi implementation has already suggested an important objective for future work.
+Nevertheless, there are also other interesting directions to consider, such as:
+
+\begin{itemize}
+    \item implementation of a proprietary Mqtt broker: currently, RuFi relies on a public Mqtt broker for the communication between devices.
+          However, having a proprietary Mqtt broker would allow for more control over the communication and the possibility of implementing more advanced features;
+    \item implementation of a more advanced Domain Specific Language: although the topic was briefly addressed during the development of the thesis, it played a marginal role.
+          However, it would be interesting in the future to be able to go into more detail about the design and development of a macro-based DSL that would allow for a better developer experience when writing and reading aggregate programs written with RuFi;
+\end{itemize}
