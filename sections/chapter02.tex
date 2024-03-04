@@ -37,7 +37,7 @@ The local, round-based computational model for device $\delta$ consists of the f
     \item perceive contextual information through sensors;
     \item retrieve stored information about the previous round execution;
     \item evaluate the program P, manipulating the data values received by neighbors, perceived from the context or retrieved from local memory;
-    \item stores some data to be used in the following round and emits a message to all neighbors with information about the computation outcome;
+    \item store some data to be used in the following round and emit a message to all neighbors with information about the computation outcome;
     \item go back to sleep.
 \end{enumerate}
 
@@ -82,7 +82,8 @@ Hereby are presented the four core field manipulation expressions, previously me
           the device $\delta$ yields the result of the application of the anonymous function $(x) \rightarrow e$ to the value of the rep expression at the previous round, then the same anonymous function is
           applied to the initialization expression $e_0$;
     \item $nbr\{e\}$ is the \textit{neighboring field construction} expression, modeling device-to-neighbor interaction and mapping each neighbor of $\delta$ to the result of the expression e;
-    \item $if(e_0)\{e_1\}\{e_2\}$ represents \textit{domain restriction}. It is a lazy-evaluating branch construct, computing $e_1$ on devices in the restricted domain $D_t$ where $e_0$ is true and $e_2$ on devices in the restricted domain $D_f$ where $e_0$ is false.
+    \item $if(e_0)\{e_1\}\{e_2\}$ \footnote[01]{In some of the current implementations of \ac{fc}, including the one presented in this thesis, this expression is often called ``branch''}
+          represents \textit{domain restriction}. It is a lazy-evaluating branch construct, computing $e_1$ on devices in the restricted domain $D_t$ where $e_0$ is true and $e_2$ on devices in the restricted domain $D_f$ where $e_0$ is false.
           Since the device $delta$ does not compute the other branch of the expression, there are two important consequences:
           \begin{itemize}
               \item any $nbr\{e\}$ expression in the opposite branch of the domain cannot communicate with the device $\delta$ since it never computes it;
@@ -310,6 +311,16 @@ The developer can also implement the Iterator trait for his custom types, enabli
     \item \textbf{Consumer Adaptors}: these are methods that take ownership of the iterator because they traverse it using its next method, thus consuming it. Examples of consumer adaptors are reducing methods like \textit{sum};
     \item \textbf{Iterator Adaptors}: these are methods that don't take ownership of the iterator, since they take an iterator and return another, modified one. An example of an iterator adaptor is the \textit{map} method, which applies a function to each element of the iterator;
 \end{itemize}
+
+\subsubsection{Error Handling}
+Rust provides mechanisms for error handling that are equivalent of the ones we can find in most of the modern functional programming languages: Options and Results.
+The Option type models a value that can be absent and is implemented through an enum that can have two variants: Some, which contains a value, and None, which represents the absence of the value.
+This type offers many functions to manipulate its hypotetical value, such as \textit{map}, \textit{for\_each} and \textit{unwrap}, which attempts to get the value of the enum if present, panicking (the Rust
+equivalent of throwing an exception) if the value is not present.
+Another common mechanism for error handling in rust is the Result type, which represents a computation that may fail. This type is similar to the ``Either'' type of some functional languages like Haskell or Scala,
+and it is also implemented with an enum that can have two variants: Ok, which contains a value, and Err, which contains an error value. This type also offers many functions to operate with it, such as
+\textit{unwrap}, \textit{unwrap\_or}, \textit{map} and \textit{map\_err}.
+Since both of these types are enums, it is possible to deconstruct them via pattern matching.
 
 \subsection{Metaprogramming in Rust}
 In computer science, \textit{metaprogramming} is the technique by which a programmer can write code that generates or manipulates other code. In Rust, this technique is enabled
