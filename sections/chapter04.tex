@@ -25,7 +25,7 @@ In the figure, we can see the following components:
     \item \textbf{rf-distributed}: this component defines concepts related to the distributed execution of aggregate programs.
           In particular, it defines core abstractions related to networking and message passing, as well as an implementation of the computational model discussed in \ref{par:comp-model};
     \item \textbf{rf-distributed-impl}: this component exposes a standard implementation for the concepts defined in \textbf{rf-distributed}.
-          The choice of separating the abstraction definitions and the implementations in two modules will be discussed in section \ref{chap:Implementation};
+          The choice of separating the abstraction definitions and the implementations in two modules will be discussed in chapter \ref{chap:implementation};
     \item \textbf{rf-gradient}: this component is a library exposing the gradient algorithm as an aggregate program.
 \end{itemize}
 
@@ -89,7 +89,7 @@ In the class diagram in figure \ref{fig:round-vm-class}, we can see the elements
     \label{fig:round-vm-class}
 \end{figure}
 
-The Slot is a representation of a core construct of the \ac{ac} inside the \ac{ast}. A Path is nothing other than a sequence of Slots, denoting a chain of aggregate operations.\\
+The Slot is a representation of a core construct of the \ac{ac} inside the \ac{ast}. A Path is a sequence of Slots, denoting a chain of aggregate operations.\\
 A level above, the Export represents the entire \ac{ast} of the aggregate program, decorated with the value computed at each Path. The Export is also shared between neighbors during each
 computation round.\\
 The VMStatus encapsulates the execution state: it has a representation of the execution stack and the current Path being evaluated.\\
@@ -130,7 +130,7 @@ In this section, we will showcase the behavior of a device when executing an agg
 \end{figure}
 
 The activities represented in the diagram \ref{fig:behavior} closely resemble the computational model in \ref{par:comp-model}.
-Also, the proposed behavior represents a synchronous execution cycle, where all the steps are performed in a sequential order. It is possible to extend this design
+It is worth noting that the proposed behavior represents a synchronous execution cycle, where all the steps are performed in a sequential order. It is possible to extend this design
 to support the asynchronous execution of some of the steps like the discovery process, which could be done in parallel with the computation cycle. However, this solution would require the employment of an asynchronous runtime, which is a requirement that can be costly for certain device architectures. As such, the proposed design
 takes into account the synchronous case, leaving the asynchronous one to future developments.
 
@@ -154,7 +154,7 @@ The behavior of the system when a device is added to the network is represented 
 \begin{enumerate}
     \item The device first instantiates a new Network with an initial list of discovered neighbor topics;
     \item The Network subscribes to the neighbors' topics via the Broker;
-    \item If the subscription is successful, a reference to the Network is returned to the device; if not, an error is returned instead.
+    \item If the subscription is successful, a reference to the Network is returned to the device; if not, an \texttt{Err} is returned instead.
 \end{enumerate}
 
 \subsubsection{Message Passing}
