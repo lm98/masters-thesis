@@ -180,3 +180,23 @@ The aggregate program itself is a rep operation that has an initial value for th
 Then, inside the repetition, there is a \textit{mux} call that returns a value of $0.0$ if the device is a source or else an aggregation between neighboring values is performed via the \textit{foldhood plus} builtin, resulting in the minimum distance $d + 1.0$ being kept as a result of the whole computation.
 In this way, the immediate neighbors of the source will compute a value of $0.0 + 1.0$, and the neighbors of the neighbors will compute $1.0 + 1.0$, and so on.
 For non-source devices that are not indirect neighbors of the source, the final result will be the starting value for the foldhood operator of $f64::INFINITY$.
+
+\section{Macro-based DSL}
+One of the objectives of the RuFi project is to provide a user-friendly and high-level DSL for writing aggregate programs. However, due to the Rust language's syntax, the current DSL isn't as user-friendly and
+easily readable as the \ac{scafi} DSL: in fact, the developer of aggregate programs in \ac{rufi} needs to write a lot more boilerplate code, mainly due to the RoundVM dependency of the core constructs and the absence of high-level 
+mechanisms like self-types and implicit parameters.
+The listing \ref{lst:rufi_gradient} highlights this issue, as there are many instances where we explicitly pass a RoundVM reference to an expression.
+To address this issue, we implemented a set of declarative macros that can be used instead of the core constructs and expands to a closure that takes a RoundVM reference as a parameter and passes it to a core construct like in the following listing:
+
+\begin{lstlisting}[language=Rust]
+    #[macro_export]
+    macro_rules! rep {
+        ($init:expr, $fun:expr) => {{
+            |vm| rep(vm, $init, $fun)
+        }};
+    }
+\end{lstlisting}
+
+The listing \ref{lst:lst:rufi_gradient_macro} shows how we can avoid some boilerplate code by using the macros instead of the core constructs when possible.
+
+\lstinputlisting[language=Rust, label={lst:lst:rufi_gradient_macro}]{listings/rufi_gradient_macros.rs}
