@@ -46,12 +46,12 @@ One of the most important functions of the RoundVM is the \textit{nest} function
 The nest function takes as the parameters:
 
 \begin{itemize}
-    \item \textit{self}: a mutable reference to Self, the RoundVM;
-    \item \textit{slot}: the slot that should be written inside the Export;
-    \item \textit{expr}: an expression. In RuFi, expressions have the added parameter of a mutable reference to the RoundVM, since they may be language constructs, as will be later
+    \item \texttt{self}: a mutable reference to Self, the RoundVM;
+    \item \texttt{slot}: the slot that should be written inside the Export;
+    \item \texttt{expr}: an expression. In RuFi, expressions have the added parameter of a mutable reference to the RoundVM, since they may be language constructs, as will be later
           explained in this section;
-    \item \textit{write}: a boolean flag that determines if the value of the expression should be written in the Export.
-    \item \textit{inc}: a boolean flag that determines if the index of the AST's Slot in the VMStatus should be incremented.
+    \item \texttt{write}: a boolean flag that determines if the value of the expression should be written in the Export.
+    \item \texttt{inc}: a boolean flag that determines if the index of the AST's Slot in the VMStatus should be incremented.
 \end{itemize}
 
 The behavior of the function can be summarized as follows:

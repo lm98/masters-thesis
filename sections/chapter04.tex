@@ -9,7 +9,7 @@ the detailed design, where the system will also be described in terms of behavio
 
 \section{Architectural Design}
 \label{sec:architectural-design}
-In this section, we will present and discuss RuFi's architectural design, shown in figure \ref{fig:rufi-architecture}.
+In this section, we will present and discuss RuFi's architectural design, shown in \cref{fig:rufi-architecture}.
 
 \begin{figure}[ht!]
     \centering
@@ -32,7 +32,7 @@ In the figure, we can see the following components:
 \subsection{RuFi Core}
 \label{subsec:rufi-core}
 As mentioned in \ref{sec:architectural-design}, the module RuFi Core contains all the fundamental abstractions needed to start writing and evaluating aggregate programs.
-Its structure is represented by the diagram in figure \ref{fig:rufi-core-architecture}.
+Its structure is represented by the diagram in figure \cref{fig:rufi-core-architecture}.
 
 \begin{figure}[ht!]
     \centering
@@ -52,7 +52,7 @@ Its structure is represented by the diagram in figure \ref{fig:rufi-core-archite
 \subsection{RuFi Distributed}
 \label{subsec:rufi-distributed}
 This module, as described in \ref{sec:architectural-design}, defines concepts related to the distributed execution of aggregate programs.
-Its structure is represented by the diagram in figure \ref{fig:rufi-distributed-architecture}.
+Its structure is represented by the diagram in \cref{fig:rufi-distributed-architecture}.
 
 \begin{figure}[ht!]
     \centering
@@ -90,12 +90,12 @@ In the class diagram in figure \ref{fig:round-vm-class}, we can see the elements
 \end{figure}
 
 The Slot is a representation of a core construct of the \ac{ac} inside the \ac{ast}. A Path is a sequence of Slots, denoting a chain of aggregate operations.\\
-A level above, the Export represents the entire \ac{ast} of the aggregate program, decorated with the value computed at each Path. The Export is also shared between neighbors during each
+The Export represents the entire \ac{ast} of the aggregate program, decorated with the value computed at each Path, and it is shared between neighbors during each
 computation round.\\
 The VMStatus encapsulates the execution state: it has a representation of the execution stack and the current Path being evaluated.\\
 The Context represents the execution context for the device and contains relevant information such as the device identifier and the device's sensors alongside the exports of all the neighbors.
 This means that during the computation process, each device has the \ac{ast} of its neighbors. This aspect is crucial to implement neighboring operations.\\
-Above all, the RoundVM is responsible for generating the \ac{ast} and evaluate functions, and it does so with the \textit{nest} \ref{lst:nest} function, which gets executed whenever a core construct is called
+The RoundVM is responsible for generating the \ac{ast} and evaluate functions, and it does so with the \textit{nest} \ref{lst:nest} function, which gets executed whenever a core construct is called
 and causes the VM to push a new Slot into the current Path. A more detailed explanation of this function will be given in chapter \ref{chap:implementation}.
 
 \subsubsection{Language}
@@ -105,9 +105,9 @@ a dependency on the RoundVM, and so do the expressions that can be passed to the
 \lstinputlisting[language=Rust, label={lst:lang}]{listings/lang.rs}
 
 \subsection{RuFi Distributed}
-As mentioned before, the Distributed module of RuFi has the goal of enabling the distributed execution of aggregate programs. A key concept defined in this module to reach this goal is the Platform.
+The Distributed module of RuFi has the goal of enabling the distributed execution of aggregate programs. A key concept defined in this module to reach this goal is the Platform.
 This structure is responsible for managing the execution cycle of aggregate programs, as well as the communication between neighbors, and it does so by leveraging the other concepts defined in the module.
-A representation of the main concepts in the module is shown in figure \ref{fig:distributed-class}.
+A representation of the main concepts in the module is shown in \cref{fig:distributed-class}.
 
 \begin{figure}[ht!]
     \centering
@@ -120,7 +120,7 @@ A more detailed explanation of the module's components' functioning will be give
 
 \subsection{Behavior}
 \label{subsec:behavior}
-In this section, we will showcase the behavior of a device when executing an aggregate program, which is represented by the activity diagram in figure \ref{fig:behavior}.
+In this section, we will showcase the behavior of a device when executing an aggregate program, which is represented by the activity diagram in \cref{fig:behavior}.
 
 \begin{figure}[ht!]
     \centering
@@ -142,7 +142,7 @@ Although there is no strict requirement for the communication protocol between d
 As such, the following sequence diagrams will feature a Broker participant, whose design falls out of this thesis' scope, who is responsible for forwarding and broadcasting messages between devices.
 
 \subsubsection{Network Creation}
-The behavior of the system when a device is added to the network is represented by the sequence diagram in figure \ref{fig:network-creation}.
+The behavior of the system when a device is added to the network is represented by the sequence diagram in \cref{fig:network-creation}.
 
 \begin{figure}[ht!]
     \centering
@@ -153,12 +153,12 @@ The behavior of the system when a device is added to the network is represented 
 
 \begin{enumerate}
     \item The device first instantiates a new Network with an initial list of discovered neighbor topics;
-    \item The Network subscribes to the neighbors' topics via the Broker;
-    \item If the subscription is successful, a reference to the Network is returned to the device; if not, an \texttt{Err} is returned instead.
+    \item the Network subscribes to the neighbors' topics via the Broker;
+    \item if the subscription is successful, a reference to the Network is returned to the device; if not, an \texttt{Err} is returned instead.
 \end{enumerate}
 
 \subsubsection{Message Passing}
-The behavior of the system when a device sends a message to its neighbors is represented by the sequence diagram in figure \ref{fig:message-passing}.
+The behavior of the system when a device sends a message to its neighbors is represented by the sequence diagram in \cref{fig:message-passing}.
 
 \begin{figure}[ht!]
     \centering

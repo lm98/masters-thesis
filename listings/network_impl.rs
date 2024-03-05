@@ -34,7 +34,7 @@ impl SyncMQTTNetwork {
     fn subscribe_to_topics(client: &mut Client, topics: Vec<i32>) -> NetworkResult<()> {
         for nbr in topics.clone() {
             if let Err(e) = client
-                .subscribe(format!("hello-rufi/{nbr}/subscriptions"), QoS::AtMostOnce)
+                .subscribe(format!("nodes/{nbr}/subscriptions"), QoS::AtMostOnce)
             {
                 return Err(e.into());
             }
@@ -49,7 +49,7 @@ impl Network for SyncMQTTNetwork {
         let to_send = serde_json::to_vec(&msg)?;
         self.client
             .try_publish(
-                format!("hello-rufi/{source}/subscriptions"),
+                format!("nodes/{source}/subscriptions"),
                 QoS::AtMostOnce,
                 false,
                 to_send,
