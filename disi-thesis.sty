@@ -40,8 +40,8 @@
 \newcommand{\session}[1]{\def\thesession{#1}}
 \newcommand{\academicyear}[1]{\def\theacademicyear{#1}}
 
-\newenvironment{abstract}{\chapter*{\centering\abstractname}\addcontentsline{toc}{chapter}{\abstractname}}{} 
-\newenvironment{acknowledgements}{\chapter*{\acknowledgementsname}}{} 
+\newenvironment{abstract}{\chapter*{\centering\abstractname}\addcontentsline{toc}{chapter}{\abstractname}}{}
+\newenvironment{acknowledgements}{\chapter*{\acknowledgementsname}}{}
 \newenvironment{dedication}{\chapter*{}\begin{flushright}\itshape}{\normalfont\end{flushright}}
 \newenvironment{inlinelist}{\begin{enumerate*}[label=\emph{(\roman{*})}]}{\end{enumerate*}}
 
@@ -72,7 +72,7 @@
         \\
         \noindent\hrulefill
         \vspace{0.4cm}
-        
+
         \Large
         \theprogramme
 
@@ -81,10 +81,10 @@
         \textbf{
             \thetitle
         }
-        
+
         \large
         \vspace{1cm}
-        Tesi di laurea in:
+        Thesis in:
         \\
         \textsc{\thesubject}
 
@@ -92,44 +92,44 @@
         %
         \begin{minipage}[t]{0.64\textwidth}
             \begin{flushleft}
-                \textit{Relatore} 
-                \\ 
+                \textit{Supervisor}
+                \\
                 \textbf{\thesupervisor}
                 \\
                 \vspace{0.4cm}
                 \ifdefined\thecosupervisor
-                \ifdefined\themorecosupervisor
-                \textit{Correlatori} 
-                \\
-                \textbf{\thecosupervisor}
-                \\
-                \textbf{\themorecosupervisor}
-                \else
-                \textit{Correlatore} 
-                \\
-                \textbf{\thecosupervisor}
-                \fi
+                    \ifdefined\themorecosupervisor
+                        \textit{Co-supervisors}
+                        \\
+                        \textbf{\thecosupervisor}
+                        \\
+                        \textbf{\themorecosupervisor}
+                    \else
+                        \textit{Co-supervisor}
+                        \\
+                        \textbf{\thecosupervisor}
+                    \fi
                 \fi
             \end{flushleft}
         \end{minipage}
         %
         \begin{minipage}[t]{0.34\textwidth}
             \begin{flushright}
-                \textit{Candidato} 
-                \\ 
+                \textit{Candidate}
+                \\
                 \textbf{\theauthor}
             \end{flushright}
         \end{minipage}
         \\
-        
+
         \vfill
         \noindent\hrulefill
         \vspace{0.3cm}
         \Large
-        
-        \thesession{} Sessione di Laurea
+
+        \thesession{} Graduation Session
         \\
-        Anno Accademico \theacademicyear
+        Academic Year \theacademicyear
     \end{titlepage}
     \restoregeometry
 }
