@@ -38,6 +38,7 @@
 \acrodef{rfid}[RFID]{Radio-Frequency Identification Technology}
 \acrodef{fp}[FP]{Functional Programming}
 \acrodef{scafi}[ScaFi]{Scala Fields}
+\acrodef{rufi}[RuFi]{Rust Fields}
 
 
 \mainlinespacing{1.241} % line spacing in main matter, comment to default (1)
@@ -49,9 +50,9 @@
 \begin{abstract}
     The rapid expansion of the Internet of Things has led to the proliferation of computational resources in the physical world, which are now embedded in everyday objects and environments.
     The Aggregate Computing paradigm has emerged as a promising approach to tackle the complexity of designing and coordinating these systems, by shifting the focus from individual devices to
-    programming the global behavior of whole computational collectives. However, state-of-the-art implementations of such paradigm, like ScaFi, are often based on the Java Virtual Machine, which is not suitable for all resource-constrained, ``thin'' devices.
-    Therefore, the Rust Fields project aims to exploit the Rust programming language's features to provide a more lightweight and memory-efficient alternative to the JVM-based languages. In this paper, we will present the design and development
-    of a Rust-based platform that will enable the distributed execution of Rust-based aggregate programs, taking a step towards the goal of bringing aggregate computing to thin devices.
+    programming the global behavior of whole computational collectives. The current state-of-the-art implementation of this paradigm is \ac{scafi}, which targets the Java Virtual Machine.
+    Concurrently, the \ac{rufi} project aims to exploit the Rust programming language's features to provide a more lightweight and memory-efficient implementation of Aggregate Computing that can be executed inside resource-constrained, ``thin'' devices.
+    In this paper, we will present the design and development of a Rust-based platform that will enable the distributed execution of \ac{rufi}-based aggregate programs, taking a step towards the goal of bringing aggregate computing to thin devices.
 \end{abstract}
 
 \begin{dedication} % this is optional
@@ -64,7 +65,7 @@
 \end{dedication}
 
 \begin{acknowledgements} % this is optional
-    Optional. Max 1 page.
+    I 
 \end{acknowledgements}
 
 %----------------------------------------------------------------------------------------
