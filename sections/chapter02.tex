@@ -45,7 +45,7 @@ It is said that the device $\delta$ \textit{fires} when performing the steps 2-6
 
 \subsection{Field Calculus' Syntax}
 \label{subsec:fc-syntax}
-The core syntax of the \ac{fc} is shown in figure \ref{fig:fc-syntax}, where we can see the following elements:
+The core syntax of the \ac{fc} is shown in \cref{fig:fc-syntax}, where we can see the following elements:
 
 \begin{figure}
     \begin{align*}
@@ -216,7 +216,7 @@ However, if we analyze the following code:
     let s2 = s1;
 \end{lstlisting}
 
-Since s1 is a String type, which does not have a known size at compile time, s1 will consist of a pointer in the stack, pointing to a heap-allocated memory that contains the actual string data, as shown in the figure \ref{fig:string-memory-rep}.
+Since s1 is a String type, which does not have a known size at compile time, s1 will consist of a pointer in the stack, pointing to a heap-allocated memory that contains the actual string data, as shown in the \cref{fig:string-memory-rep}.
 
 \begin{figure}[h]
     \centering
@@ -225,7 +225,7 @@ Since s1 is a String type, which does not have a known size at compile time, s1 
     \label{fig:string-memory-rep}
 \end{figure}
 
-When s1 gets copied into s2, only the pointer in the stack is copied, so that the memory layout of the program will look like the one in figure \ref{fig:string-memory-rep2}.
+When s1 gets copied into s2, only the pointer in the stack is copied, so that the memory layout of the program will look like the one in \cref{fig:string-memory-rep2}.
 
 \begin{figure}[h]
     \centering
@@ -235,7 +235,7 @@ When s1 gets copied into s2, only the pointer in the stack is copied, so that th
 \end{figure}
 
 According to the ownership rules, when s1 and s2 go out of scope, one may think that the memory will be freed twice, causing a double-free error. However, in reality, after the copy, the compiler
-will not consider s1 to be valid anymore, so when s1 goes out of scope, the memory will be freed only once, as shown in figure \ref{fig:string-memory-rep3}.
+will not consider s1 to be valid anymore, so when s1 goes out of scope, the memory will be freed only once, as shown in \cref{fig:string-memory-rep3}.
 
 \begin{figure}[h]
     \centering
@@ -352,7 +352,7 @@ As stated in the official documentation of the project: \\
 ``    Since the project was meant as an exploration of different options for bringing aggregate programming into native contexts, we decided to explore both solutions. The resulting architecture reflects this choice: in fact, we decided to develop a standalone aggregate programming framework in the Rust language, while also experimenting with different ways to integrate it with the Scala ScaFi’s ecosystem.
 ''
 
-The resulting architecture reflects this choice and this is made evident in the diagram in figure \ref{fig:rustfields-architecture}.
+The resulting architecture reflects this choice and this is made evident in the diagram in \cref{fig:rustfields-architecture}.
 
 \begin{figure}[h]
     \centering
@@ -361,7 +361,7 @@ The resulting architecture reflects this choice and this is made evident in the 
     \label{fig:rustfields-architecture}
 \end{figure}
 
-In the architecture diagram shown in figure \ref{fig:rustfields-architecture}, the RuFi-core is responsible for implementing in Rust the core concepts of the new \ac{ac} implementation,
+In the architecture diagram shown in \cref{fig:rustfields-architecture}, the RuFi-core is responsible for implementing in Rust the core concepts of the new \ac{ac} implementation,
 structured in a way that is somewhat similar to the ScaFi's core. Then, an \textit{integration layer} was built on top of the Rust core to allow communication
 between Scala and Rust code. From then, the project development was divided into two main branches:
 \begin{itemize}

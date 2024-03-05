@@ -32,7 +32,7 @@ A third axes along which the thesis' work has been validated is the ``User Accep
 In particular, this involved the development of a demo project that exploits the RuFi framework to execute a gradient aggregate program within a network of 5 devices, each one
 represented by a process running on a machine. At an application level, the topology is linear, meaning each device $i$ is a neighbor of the devices $i+1$ and $i-1$, excluding 1 and 5
 which are the extremes of the topology. At a deployment level, there are four processes each one simulating a device running on a Desktop PC, while the fifth runs on a Raspberry Pi 3.\\
-Each process communicates with the others through the MQTT protocol via the public Mosquitto MQTT broker. A graphical representation of the network is shown in figure \ref{fig:network_topology}.
+Each process communicates with the others through the MQTT protocol via the public Mosquitto MQTT broker. A graphical representation of the network is shown in \cref{fig:network_topology}.
 
 \begin{figure}[ht!]
     \centering
@@ -48,7 +48,7 @@ In particular, the profiling has been executed for three different execution cyc
 the device number 1 and the device number 3. These devices have been chosen because they have a different amount of neighbors, which means we can see how processing multiple neighboring messages
 can affect memory usage.
 
-The results are shown in figure \ref{fig:memory_profiling}. The first group of columns shows the memory usage for the device number 3, while the second group shows the memory usage for the device number 1.
+The results are shown in \cref{fig:memory_profiling}. The first group of columns shows the memory usage for the device number 3, while the second group shows the memory usage for the device number 1.
 
 \begin{figure}[ht!]
     \centering
