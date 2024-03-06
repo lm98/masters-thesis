@@ -4,7 +4,10 @@
 
 \chapter{Conclusion}
 \label{chap:conclusions}
-In this thesis, we have presented the design and development of a distributed execution platform for the RustFields framework, which has the ultimate goal of bringing Aggregate Computing to resource-constrained devices.
+The current landscape of Aggregate Programming frameworks highlights the opportunity to research and develop new solutions that can bring the paradigm to a wider range of devices
+while providing a high-level, functional API. It is with this objective in mind that we presented \ac{rufi}, a project that aims to leverage the Rust programming language's features of memory safety,
+performance and expressiveness to provide a minimal functional core for \ac{ac} that can be used on multiple platforms, including thin devices, and build high-level APIs on top of it.
+In particular, this thesis tackled the problems of validating and improving the existing core of the RuFi framework, as well as the design and development of a new module that would enable the distributed execution of Rust-based aggregate programs.
 Starting by establishing a solid base regarding the context, paradigms and state-of-the-art for Aggregate Computing and a solid foundation of the Rust programming language concepts and idioms,
 we were able to identify a set of requirements and goals for this thesis project, which were then used as a guide during the design and development phases.
 Our analysis of the current state of the RustFields project has highlighted the need for validation and improvement of the current core library, as well as the need for a new module that would enable
@@ -14,7 +17,7 @@ components, and then delving into the detailed design of such components. These 
 We also started collecting experimental data on memory usage of the current RustFields framework, which will be useful for future research and improvements.
 
 \section{Current Limitations}
-As of now, although the main goal of the thesis of providing a distributed execution platform for the RustFields framework has been achieved, the higher-level objective of bringing \ac{ac} on all thin devices is still not fully accomplished.
+As of now, although the main goal of the thesis of providing a distributed execution platform for the RustFields framework has been achieved, the higher-level objective of supporting \ac{rufi} on all thin devices is still not fully accomplished.
 Experiments on running the current RuFi framework in very resource-constrained devices like the Esp32 have shown that the current implementation is not yet suitable for such devices, as the memory usage is still too high, highlighting the need
 for further research and improvement on the memory footprint of such a framework.
 
@@ -23,8 +26,11 @@ The previous analysis of the limitations of the current RuFi implementation has 
 Nevertheless, there are also other interesting directions to consider, such as:
 
 \begin{itemize}
-      \item implementation of a proprietary Mqtt broker: currently, RuFi relies on a public Mqtt broker for the communication between devices.
-            However, having a proprietary Mqtt broker would allow for more control over the communication and the possibility of implementing more advanced features;
+      \item support asynchronous network communication and execution: as mentioned before in section \ref{chap:implementation}, the current solution is based on synchronous interfaces and execution cycle. This highlights the opportunity to implement an asynchronous
+            version of the RuFi \texttt{Platform} that can manage and coordinate the processes of networked communication, neighbor discovery and program execution concurrently, allowing to take the most out of modern computer architectures;
+      \item support reified fields: in the current RuFi implementation, the \ac{fc}'s concept of \texttt{Computational Field} is technically not represented. Instead, it is derived by the \texttt{RoundVM} when executing a core construct. It would be interesting to explore the
+            possibility of reifying the \texttt{Computational Field} as a first-class concept in the RuFi framework, allowing the constructs to explicitly manipulate fields. This solution could streamline the core of the framework as well as
+            introduce the possibility of experimenting with other constructs and extensions of the \ac{fc} model;
       \item improve further the RuFi API and DSL: the current improvements on the developer experience of the RuFi API and DSL are solely based on simple Rust declarative macros and although they eliminate
             some of the boilerplate code, they are still not as user-friendly as higher-level DSLs like \ac{scafi}. A possible future line of research could be leveraging the more powerful Rust procedural macros, a subject that was not expanded in this thesis
             but could offer many opportunities to improve the RuFi DSL.
