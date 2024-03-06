@@ -12,8 +12,9 @@ of the systems of the future, where the emphasis will now be on the global behav
 The development of this new field has already led to the creation of very important and well-researched computational models, languages and frameworks. However, the current state of the art in \ac{ac}
 frameworks are for the most part based on the \ac{jvm}, exploiting its vast ecosystem. One important example of such a framework is ScaFi: a project that utilizes the JVM-based Scala language
 to deliver a powerful and flexible \ac{dsl} and toolkit for \ac{ac}. Nevertheless, relying on the \ac{jvm} has some drawbacks, one of the most important being the fact that it comes with additional costs in terms
-of memory and computational resources, which we cannot assume are always available on every device that could be part of the \ac{pc} vision. It is in this perspective that the Rust Fields project was born: to
-research and explore the possibility of taking advantage of the Rust Language's well-known features of safety, performance and memory efficiency to develop an \ac{ac} framework that can be used on thin devices as well.
+of memory and computational resources, which we cannot assume are always available on every device that could be part of the \ac{pc} vision. It is in this perspective that the FCPP framework was born:
+to exploit C++'s performance and widespread support on many architectures to bring \ac{ac} to thin devices. Within this varied context, the \ac{rufi} project aims to leverage the Rust programming language's 
+features of memory safety, performance and expressiveness to provide a minimal functional core for \ac{ac} that can be used on multiple platforms, including thin devices, and build high-level APIs on top of it.
 This thesis' work takes the core features developed in the \ac{rufi} project and builds up from them by testing and improving the API of the previous work and using them as a basis for the design and development of a Rust-based platform that will enable the distributed execution of aggregate programs written in Rust,
 taking a step towards the goal of bringing \ac{ac} to thin devices.
 By the end of this thesis, it will be possible to write aggregate programs in Rust using a comprehensively tested core set of constructs and then execute them on a distributed network of devices.

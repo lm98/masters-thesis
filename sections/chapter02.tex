@@ -98,12 +98,12 @@ Hereby are presented the four core field manipulation expressions, previously me
 
 \section{The ScaFi Framework}
 \ac{scafi} is one of the most actively researched and maintained implementations of \ac{ac}.
-It is hosted in the Scala language, a powerful and expressive \ac{jvm}-based language that brings functional programming to the JVM ecosystem with the aim of achieving expressiveness, safety and scalability.
+It is hosted in the Scala language, a powerful and expressive \ac{jvm}-based language that brings functional programming to the JVM ecosystem to achieve expressiveness, safety and scalability.
 Although \ac{scafi} is not the only \ac{ac} implementation, compared to other aggregate programming languages it ``provides a more high-level platform that
 might support agile prototyping for research and easier integration with other tools and environments for distributed systems
 (cf. the Web and Android) \cite{10.1145/3285956}'', representing a valuable tool for scientific research.
 
-\subsection{ScaFi Architecture}
+\subsection*{ScaFi Architecture}
 ScaFi, as a software artifact, consists of Scala DSL and API modules for writing, testing and running aggregate programs. The architecture of the ScaFi framework shown in figure \ref{fig:scafi-architecture} consists of the following components:
 
 \begin{figure}[h]
@@ -124,6 +124,26 @@ ScaFi, as a software artifact, consists of Scala DSL and API modules for writing
 \end{itemize}
 
 In particular, this thesis follows up on a project that will be later introduced which took inspiration from a subset of the scafi-core module.
+
+\section{FCPP}
+FCPP \cite{9196401} is an implementation of the \ac{fc} model based on the C++ programming language. It has been designed and developed to bring the \ac{ac} paradigm to resource-constrained devices that cannot support the \ac{jvm}.
+It does so by providing an extensible C++ library and a performance-oriented simulator that allows the developer to speed up the development process of aggregate programs.
+
+\subsection*{FCPP Architecture}
+The FCPP library consists on several header files, divided in three main conceptual layers, as shown in \cref{fig:fcpp-architecture}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/fcpp-architecture.png}
+    \caption{The FCPP Architecture}
+    \label{fig:fcpp-architecture}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{components}: this layer provides core abstractions such as \textit{node} and \textit{net}, that are obtained by combining a sequence of \textit{components} in a mixin-like fashion;
+    \item \textbf{aggregate functions}: this layer provides the actual implementation of the \ac{fc} as templated functions that use \textit{node} and \textit{net} in their specification;
+    \item \textbf{data structures}: this layer provides the implementation of the data structures used by the \textit{components} and the \textit{aggregate functions} layers.
+\end{itemize}
 
 \section{The Rust Programming Language}
 The Rust Programming Language\cite{002} is a multi-paradigm, general-purpose programming language designed originally for systems-level development. It strives to achieve both execution
@@ -336,12 +356,14 @@ The listing \ref{lst:declarative_macros} shows an example of a declarative macro
 This thesis will not introduce the reader to procedural macros, as they constitute a deeply technical topic that is not relevant to the scope of this work.
 
 \subsection{Why Rust}
-As shown in the previous sections, Rust is a general-purpose programming language designed with a focus on safety, speed and efficiency. These design principles, coupled with high-level features
-more adjacent to functional programming than to low-level programming, making Rust a good candidate for developing \ac{ac} implementations that can run on thin devices.
-
+As shown in the previous sections, Rust is a general-purpose programming language designed with a focus on performance and safety, while providing many of the high-level abstractions that are typical of modern programming languages.
+In particular, it has comparable performance to C and C++, while also granting a higher degree of robustness coming from the borrow checker, which ensures memory safety and a strong type system that
+enforces type safety. These features make Rust a good choice for developing software that could be run both on thin devices and in more performant systems, and thanks to its cross-compilation features, it simplifies the task of maintaining
+a codebase that can be run on different platforms. Moreover, Rust's powerful macro system allows for the possibility of writing a high-level \ac{dsl}, making it a good candidate for implementing an \ac{ac} framework that can standardize the development
+of aggregate programs.
 
 \section{Towards a Rust-based AC Implementation: the RustFields Project}
-The RustFields Project\cite{001} was an attempt to bring \ac{ac} to thin devices exploiting the Rust programming language. The project aimed to reach its goals by developing two lines of research:
+The RustFields Project\cite{001} was the first attempt to bring \ac{ac} to thin devices by exploiting a modern programming language like Rust. The project aimed to reach its goals by developing two lines of research:
 \begin{itemize}
     \item A pure, Rust-based implementation of AC in the same vein as the ScaFi framework;
     \item A mixed approach that aims to mix ScaFi's highly expressive API with Rust's performance and efficiency;
