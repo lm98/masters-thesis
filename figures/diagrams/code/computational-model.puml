@@ -1,0 +1,12 @@
+@startuml
+start
+while (stop condition)
+  :sleep;
+  :get neighboring field from incoming messages;
+  :perceive from sensors;
+  :retrieve previous round info from memory;
+  :evaluate program;
+  :store round-specific data;
+endwhile
+stop
+@enduml
